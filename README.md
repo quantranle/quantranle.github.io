@@ -62,7 +62,7 @@ The three rules:
 ## Change the colours
 
 Open `css/style.css`. The first section, **1. Theme colours**, lists every colour:
-one list for the dark green theme and one for the light grey theme. Change a value and the whole site follows.
+one list for the dark navy theme and one for the light grey theme. Change a value and the whole site follows.
 
 - `--bg` is the page background.
 - `--card` is the colour of boxes and cards.

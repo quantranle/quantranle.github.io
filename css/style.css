@@ -20,17 +20,17 @@
    changes everywhere.
    ------------------------------------------------------------------------- */
 
-/* Dark theme: dark green */
+/* Dark theme: dark navy */
 :root {
   color-scheme: dark;
 
-  --bg: #0b1d16;             /* page background */
-  --card: #10271e;           /* boxes and cards */
-  --border: #1c3a2d;         /* thin lines */
-  --border-strong: #2a5341;  /* button and box outlines */
-  --text: #e9f3ee;           /* main text */
-  --muted: #a7bdb2;          /* secondary text */
-  --faint: #7d968a;          /* dates and small labels */
+  --bg: #0a1424;             /* page background */
+  --card: #0f1c32;           /* boxes and cards */
+  --border: #1d2e4b;         /* thin lines */
+  --border-strong: #2b4063;  /* button and box outlines */
+  --text: #e8eef7;           /* main text */
+  --muted: #a5b3c9;          /* secondary text */
+  --faint: #7c8dab;          /* dates and small labels */
   --accent: #f5a83c;         /* highlight colour */
   --accent-ink: #1b1203;     /* text on top of the highlight colour */
   --ok: #4ade80;             /* status dot */
@@ -38,11 +38,11 @@
   --accent-soft: rgba(245, 168, 60, 0.13);
   --accent-glow: rgba(245, 168, 60, 0.35);
   --hover: rgba(255, 255, 255, 0.05);
-  --header-bg: rgba(11, 29, 22, 0.84);
-  --grid-minor: rgba(140, 220, 180, 0.045);
-  --grid-major: rgba(140, 220, 180, 0.09);
+  --header-bg: rgba(10, 20, 36, 0.82);
+  --grid-minor: rgba(140, 170, 220, 0.045);
+  --grid-major: rgba(140, 170, 220, 0.09);
   --glow-a: rgba(245, 168, 60, 0.07);
-  --glow-b: rgba(40, 160, 110, 0.16);
+  --glow-b: rgba(48, 102, 196, 0.16);
   --shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.8);
 }
 
