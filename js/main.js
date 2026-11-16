@@ -59,6 +59,7 @@
     arrowLeft: '<line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/>',
     external: '<line x1="7" y1="17" x2="17" y2="7"/><polyline points="7 7 17 7 17 17"/>',
     chevron: '<polyline points="6 9 12 15 18 9"/>',
+    close: '<line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/>',
     mail: '<rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="22 6 12 13 2 6"/>',
     github: '<path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>',
     linkedin: '<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/>',
@@ -81,7 +82,7 @@
   function iconNameFor(link) {
     const label = link.label.toLowerCase();
     const url = link.url.toLowerCase();
-    if (url.startsWith("mailto:")) return "mail";
+    if (link.isEmail || url.startsWith("mailto:")) return "mail";
     if (url.includes("github.com")) return "github";
     if (url.includes("linkedin.com")) return "linkedin";
     if (url.endsWith(".pdf") || label === "cv") return "file";
@@ -110,16 +111,105 @@
     return h("ul", { class: "tags", "aria-label": "Technologies" }, tags.map((text) => h("li", { class: "tag", text })));
   }
 
+  /* Pictures. An entry in content.js can have
+       images: ["assets/projects/a.jpg", { src: "assets/projects/b.jpg", caption: "Testing the PCB" }]
+     They are shown as small pictures; clicking one opens it large. */
+  function imagesOf(item) {
+    const list = item.images || (item.image ? [item.image] : []);
+    return list.filter(Boolean).map((entry) => (typeof entry === "string" ? { src: entry, caption: "" } : entry));
+  }
+
+  function gallery(item, title) {
+    const images = imagesOf(item);
+    if (!images.length) return null;
+    return h("div", { class: "gallery" + (images.length === 1 ? " gallery--single" : "") },
+      images.map((image, i) => {
+        const label = image.caption || title + " — picture " + (i + 1);
+        const button = h("button", { class: "gallery__item", type: "button", title: "Click to enlarge" },
+          h("img", { src: image.src, alt: label, loading: "lazy" }));
+        button.addEventListener("click", () => openLightbox(images, i, title));
+        return button;
+      }));
+  }
+
+  /* The large picture viewer. Built once, the first time a picture is clicked. */
+  let lightbox = null;
+
+  function openLightbox(images, index, title) {
+    if (!lightbox) lightbox = buildLightbox();
+    lightbox.show(images, index, title);
+  }
+
+  function buildLightbox() {
+    const picture = h("img", { class: "lightbox__image", alt: "" });
+    const caption = h("p", { class: "lightbox__caption" });
+    const previous = h("button", { class: "lightbox__nav lightbox__nav--prev", type: "button", "aria-label": "Previous picture" }, icon("arrowLeft"));
+    const next = h("button", { class: "lightbox__nav lightbox__nav--next", type: "button", "aria-label": "Next picture" }, icon("arrowRight"));
+    const close = h("button", { class: "lightbox__close", type: "button", "aria-label": "Close" }, icon("close"));
+    const figure = h("figure", { class: "lightbox__figure" }, picture, caption);
+    const dialog = h("dialog", { class: "lightbox", "aria-label": "Picture viewer" }, close, previous, figure, next);
+    document.body.append(dialog);
+
+    let images = [];
+    let index = 0;
+    let title = "";
+
+    function render() {
+      const image = images[index];
+      picture.src = image.src;
+      picture.alt = image.caption || title;
+      const counter = images.length > 1 ? (index + 1) + " / " + images.length : "";
+      caption.textContent = [image.caption || title, counter].filter(Boolean).join("  ·  ");
+      previous.hidden = next.hidden = images.length < 2;
+    }
+
+    function step(by) {
+      index = (index + by + images.length) % images.length;
+      render();
+    }
+
+    previous.addEventListener("click", () => step(-1));
+    next.addEventListener("click", () => step(1));
+    close.addEventListener("click", () => dialog.close());
+    // Clicking the dark area around the picture closes the viewer. Esc works too.
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog || event.target === figure) dialog.close();
+    });
+    dialog.addEventListener("keydown", (event) => {
+      if (images.length < 2) return;
+      if (event.key === "ArrowLeft") step(-1);
+      if (event.key === "ArrowRight") step(1);
+    });
+
+    return {
+      show(list, startAt, name) {
+        images = list;
+        index = startAt;
+        title = name;
+        render();
+        dialog.showModal();
+      },
+    };
+  }
+
   function countLabel(list, word) {
     const n = (list || []).length;
     return n + " " + word + (n === 1 ? "" : "s");
   }
 
-  /* Email, CV and profile links — used in the introduction and in Contact. */
+  /* Where the Email button leads. By default it opens a new Gmail message
+     addressed to you, in a new tab. With  emailOpensIn: "app"  in content.js
+     it opens the visitor's own mail program instead. */
+  function emailUrl(p) {
+    if (p.emailOpensIn === "app") return "mailto:" + p.email;
+    return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(p.email);
+  }
+
+  /* Email, CV and profile links — used on the home page and in Contact. */
   function profileLinks() {
     const p = C.profile;
     const links = [];
-    if (p.email) links.push({ label: "Email", url: "mailto:" + p.email });
+    if (p.email) links.push({ label: "Email", url: emailUrl(p), isEmail: true });
     (p.links || []).forEach((link) => links.push(link));
     if (p.cv) links.push({ label: "CV", url: p.cv });
     return links;
@@ -206,6 +296,7 @@
               h("strong", { text: job.company }),
               job.location ? " · " + job.location : null),
             pointList(job.points),
+            gallery(job, job.role),
             tagList(job.tags)))))
     );
   }
@@ -231,14 +322,14 @@
       "data-category": p.category || "",
       "data-spotlight": true,
     },
-      p.image ? h("img", { class: "project__image", src: p.image, alt: "", loading: "lazy" }) : null,
       h("div", { class: "project__main" },
         h("p", { class: "project__top" },
           h("span", { class: "project__category", text: p.category || "" }),
           h("span", { class: "project__date", text: p.period || "" })),
         h("h3", { class: "project__title", text: p.title }),
         p.context ? h("p", { class: "project__context", text: p.context }) : null,
-        h("p", { class: "project__summary", text: p.summary })),
+        h("p", { class: "project__summary", text: p.summary }),
+        gallery(p, p.title)),
       details,
       hasTags || hasLinks
         ? h("div", { class: "project__foot" },

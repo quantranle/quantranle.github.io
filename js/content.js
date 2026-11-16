@@ -42,6 +42,11 @@ const CONTENT = {
 
     email: "quan.lm.tran@gmail.com",
 
+    // What the Email button does:
+    //   "gmail" opens a new Gmail message to you in the visitor's browser.
+    //   "app"   opens the visitor's own mail program (Outlook, Apple Mail, ...).
+    emailOpensIn: "gmail",
+
     // Your photo. Replace the file in the assets folder, or leave "" to
     // show your initials instead.
     photo: "assets/profile.jpg",
@@ -110,6 +115,29 @@ const CONTENT = {
      EXPERIENCE  —  newest first.
        points : what you did, one "..." per bullet
        tags   : small labels under the bullets
+       images : pictures, see below. Use  images: [],  for none.
+
+     PICTURES (the same for experience and projects)
+       1. Copy the picture file into  assets/experience  or  assets/projects.
+          Use simple file names without spaces, e.g. powerco-test-bench.jpg
+       2. Write its path between the [ ]:
+
+            images: ["assets/experience/powerco-test-bench.jpg"],
+
+          Several pictures are separated by commas:
+
+            images: [
+              "assets/projects/rover-1.jpg",
+              "assets/projects/rover-2.jpg",
+            ],
+
+          To give a picture a caption, write it like this instead:
+
+            images: [
+              { src: "assets/projects/rover-1.jpg", caption: "Testing the rover outdoors" },
+            ],
+
+       Visitors see small pictures and can click one to view it large.
      ----------------------------------------------------------------------- */
   experience: [
     {
@@ -123,6 +151,7 @@ const CONTENT = {
         "Evaluated key ESS performance indicators (round-trip efficiency, usable energy and capacity) and documented simulation workflows and results for engineering handover and model reuse.",
       ],
       tags: ["MATLAB", "Simulink", "Simscape", "Battery modelling", "Thermal simulation"],
+      images: [],
     },
     {
       role: "Student Assistant, Engineering Drawing and Design",
@@ -133,6 +162,7 @@ const CONTENT = {
         "Delivered SolidWorks tutorials to 30 students, achieving a 90% success rate in the final exam.",
       ],
       tags: ["SolidWorks", "CAD", "Teaching"],
+      images: [],
     },
     {
       role: "Teaching Assistant, Coding",
@@ -143,6 +173,7 @@ const CONTENT = {
         "Taught Scratch, Minecraft Education and Python to more than 70 young learners.",
       ],
       tags: ["Python", "Scratch", "Teaching"],
+      images: [],
     },
   ],
 
@@ -155,8 +186,8 @@ const CONTENT = {
        summary  : one or two sentences — this is what people skim.
        points   : details, shown under "What I did". Use  points: [],  for none.
        links    : buttons at the bottom of the card. Use  links: [],  for none.
-       image    : optional picture, e.g. "assets/projects/rover.jpg".
-                  Leave "" for no picture.
+       images   : pictures of the project (see PICTURES under EXPERIENCE).
+                  Put the files in assets/projects. Use  images: [],  for none.
      ----------------------------------------------------------------------- */
   projects: [
     {
@@ -177,7 +208,7 @@ const CONTENT = {
       links: [
         { label: "GitHub", url: "https://github.com/quantranle/sivihack_hackathon_2026" },
       ],
-      image: "",
+      images: [],
     },
     {
       // TODO: only the thesis title is in the CV. Add a summary of what you
@@ -192,7 +223,7 @@ const CONTENT = {
       points: [],
       tags: ["Bachelor's thesis", "Sensors"],
       links: [],
-      image: "",
+      images: [],
     },
     {
       title: "Mouth Detector",
@@ -211,7 +242,7 @@ const CONTENT = {
         { label: "Publication", url: "https://wjarr.com/content/mouth-detector-combination-between-lipnet-and-pyimagesearch" },
         { label: "GitHub", url: "https://github.com/quantranle/MouthDetector" },
       ],
-      image: "",
+      images: [],
     },
     {
       title: "Wireless Emergency Stop Button",
@@ -228,7 +259,7 @@ const CONTENT = {
       ],
       tags: ["LoRa", "ESP8266", "PCB design", "EAGLE", "C"],
       links: [],
-      image: "",
+      images: [],
     },
     {
       title: "Mars Rover",
@@ -245,7 +276,7 @@ const CONTENT = {
       ],
       tags: ["Arduino Due", "Raspberry Pi", "C", "Python", "Computer vision"],
       links: [],
-      image: "",
+      images: [],
     },
   ],
 

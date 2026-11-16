@@ -32,8 +32,39 @@ Find `projects: [`. Copy one block from `{` to `},`, paste it where you want it,
 
 - `category` creates the filter buttons. Re-use an existing category or type a new one.
 - `featured: true` makes the card full width with its details open. Best used on one project.
-- `image: "assets/projects/my-photo.jpg"` adds a picture to the card (create the `projects` folder inside `assets`).
 - `links: [ { label: "GitHub", url: "https://..." } ]` adds buttons to the card.
+
+**Add pictures to an experience or a project**
+
+1. Copy the picture into `assets/experience` or `assets/projects`.
+   Use a simple file name without spaces, for example `rover-outdoor-test.jpg`.
+2. In `js/content.js`, find the entry and write the path in its `images` line:
+
+   ```js
+   images: ["assets/projects/rover-outdoor-test.jpg"],
+   ```
+
+   Several pictures:
+
+   ```js
+   images: [
+     "assets/projects/rover-1.jpg",
+     "assets/projects/rover-2.jpg",
+   ],
+   ```
+
+   A picture with a caption:
+
+   ```js
+   images: [
+     { src: "assets/projects/rover-1.jpg", caption: "Testing the rover outdoors" },
+   ],
+   ```
+
+Visitors see small pictures and can click one to view it large.
+Tips: JPG files about 1600 pixels wide and under 500 KB load quickly. The file name in `content.js`
+must match the real file exactly, including capital letters and `.jpg` / `.png`.
+Only use pictures you are allowed to publish, especially from an employer.
 
 **Change your introduction**
 Edit `headline` and `intro` in the `profile` block, and the paragraphs in the `about` block.
@@ -44,6 +75,10 @@ Replace `assets/profile.jpg` with a new square photo of the same name (400 × 40
 **Add a CV download button**
 Copy your CV into `assets`, then set `cv: "assets/CV_Quan_Tran.pdf"` in the `profile` block.
 The CV is public once the site is online, so check which address and phone number it shows.
+
+**Change what the Email button does**
+`emailOpensIn: "gmail"` in the `profile` block opens a new Gmail message to you in the visitor's browser.
+`emailOpensIn: "app"` opens the visitor's own mail program instead.
 
 **Show a status badge** (for example "Open to working student roles")
 Set `availability: "Open to working student roles"` in the `profile` block. Set it back to `""` to hide it.

@@ -160,6 +160,61 @@ img { max-width: 100%; }
   color: var(--muted);
 }
 
+/* Pictures inside experience entries and project cards.
+   Small pictures in a row; one picture alone is shown wide. */
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 8px;
+  margin-top: 16px;
+  max-width: 46em;
+}
+.gallery__item {
+  display: block; padding: 0;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--hover);
+  overflow: hidden; cursor: zoom-in;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.gallery__item:hover { border-color: var(--accent); transform: translateY(-2px); }
+.gallery__item img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.gallery--single { grid-template-columns: minmax(0, 1fr); max-width: 30em; }
+.gallery--single .gallery__item { aspect-ratio: 16 / 9; }
+
+/* The large picture viewer that opens when a picture is clicked */
+.lightbox {
+  position: fixed; inset: 0;
+  width: 100%; height: 100%; max-width: none; max-height: none;
+  margin: 0; padding: 64px 72px 28px;
+  border: 0;
+  background: rgba(4, 9, 17, 0.95); color: #e8eef7;
+}
+.lightbox[open] { display: grid; place-items: center; }
+.lightbox::backdrop { background: transparent; }
+.lightbox__figure { margin: 0; display: grid; gap: 14px; justify-items: center; }
+.lightbox__image {
+  display: block;
+  max-width: 100%; max-height: calc(100vh - 160px);
+  border-radius: 6px; object-fit: contain;
+}
+.lightbox__caption { font-family: var(--font-mono); font-size: 0.82rem; color: #a5b3c9; text-align: center; }
+.lightbox__close,
+.lightbox__nav {
+  position: absolute;
+  display: grid; place-items: center;
+  width: 44px; height: 44px; padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.25); border-radius: 6px;
+  background: rgba(255, 255, 255, 0.06); color: inherit;
+  font-size: 1.1rem; cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.lightbox__close:hover,
+.lightbox__nav:hover { border-color: #f5a83c; color: #f5a83c; }
+.lightbox__close { top: 12px; right: 12px; }
+.lightbox__nav--prev { left: 12px; top: calc(50% - 22px); }
+.lightbox__nav--next { right: 12px; top: calc(50% - 22px); }
+
 /* Message shown when content.js has a typo */
 .content-error {
   max-width: 640px; margin: 48px auto; padding: 20px 24px;
@@ -568,13 +623,6 @@ img { max-width: 100%; }
 }
 .project:hover::before { opacity: 1; }
 
-.project__image {
-  display: block; width: calc(100% + 48px); max-width: none;
-  margin: -24px -24px 4px;
-  aspect-ratio: 16 / 9; object-fit: cover;
-  border-bottom: 1px solid var(--border);
-}
-
 .project__top {
   display: flex; justify-content: space-between; gap: 12px;
   font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase;
@@ -615,7 +663,6 @@ img { max-width: 100%; }
 .project--featured .project__points .points { font-size: 0.95rem; }
 .project--featured .project__foot { grid-area: foot; align-self: end; }
 .project--featured .project__title { font-size: 1.6rem; }
-.project--featured .project__image { grid-column: 1 / -1; width: calc(100% + 56px); margin: -28px -28px 12px; aspect-ratio: 21 / 9; }
 
 /* --- Skills -------------------------------------------------------------- */
 
@@ -717,7 +764,6 @@ img { max-width: 100%; }
 @media (max-width: 760px) {
   .projects { grid-template-columns: minmax(0, 1fr); }
   .project, .project--featured { padding: 20px; }
-  .project__image, .project--featured .project__image { width: calc(100% + 40px); margin: -20px -20px 4px; }
 
   .entry { grid-template-columns: minmax(0, 1fr); gap: 0; }
   .entry__when { padding: 0 0 10px 31px; border-left: 1px solid var(--border); }
@@ -756,4 +802,9 @@ img { max-width: 100%; }
   .facts dd { padding-right: 16px; }
 
   .contact__actions .btn { flex: 1 1 auto; justify-content: center; }
+
+  .lightbox { padding: 64px 12px 76px; }
+  .lightbox__nav--prev, .lightbox__nav--next { top: auto; bottom: 16px; }
+  .lightbox__nav--prev { left: calc(50% - 52px); }
+  .lightbox__nav--next { right: calc(50% - 52px); }
 }
