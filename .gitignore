@@ -1,0 +1,6 @@
+# Local tool settings (not part of the website)
+.claude/
+
+# Operating-system clutter
+Thumbs.db
+.DS_Store

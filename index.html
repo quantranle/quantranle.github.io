@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- The text shown in the browser tab and in Google / link previews. -->
+  <title>Quan Tran — Mechatronics Engineer</title>
+  <meta name="description" content="Portfolio of Quan Tran, mechatronics engineer and M.Sc. student at the Technical University of Munich: experience, projects and skills.">
+
+  <meta name="color-scheme" content="dark light">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+
+  <!-- Picks the dark or light theme before the page is drawn (no flash). -->
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem("theme"); } catch (e) {}
+      var prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
+      document.documentElement.setAttribute("data-theme", saved || (prefersLight ? "light" : "dark"));
+    })();
+  </script>
+
+  <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <div class="backdrop" aria-hidden="true"></div>
+
+  <!-- ====================================================================
+       TOP BAR
+       ==================================================================== -->
+  <header class="site-header" id="site-header">
+    <div class="site-header__inner">
+      <a class="brand" href="#top" aria-label="Home" data-magnetic="0.3"><span id="brand-mark">QT</span></a>
+
+      <!-- NAVIGATION BUTTONS
+           - To rename a button, change its text.
+           - Every button here also appears as a big button on the home page.
+           - href="#about" opens the page with id="about" further down. -->
+      <nav class="nav" id="nav" aria-label="Page sections">
+        <a class="nav__link" href="#about" data-magnetic="0.25">About me</a>
+        <a class="nav__link" href="#experience" data-magnetic="0.25">Experience</a>
+        <a class="nav__link" href="#projects" data-magnetic="0.25">Projects</a>
+        <a class="nav__link" href="#skills" data-magnetic="0.25">Skills</a>
+        <a class="nav__link" href="#contact" data-magnetic="0.25">Contact</a>
+      </nav>
+
+      <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch colour theme" data-magnetic="0.3"></button>
+    </div>
+  </header>
+
+  <!-- ====================================================================
+       PAGES
+       The first one (id="top") is the home page. Each <section> below it
+       is its own page; only one is shown at a time.
+       The text inside every page is filled in from js/content.js.
+       ==================================================================== -->
+  <main id="main">
+
+    <!-- Home page: name, headline, photo, big buttons -->
+    <section class="hero" id="top" aria-label="Home"></section>
+
+    <section class="section" id="about" aria-labelledby="about-title">
+      <div class="section__head">
+        <span class="section__num" aria-hidden="true">01</span>
+        <h2 class="section__title" id="about-title">About me</h2>
+        <span class="section__rule" aria-hidden="true"></span>
+      </div>
+      <div class="section__body about" id="about-body"></div>
+    </section>
+
+    <section class="section" id="experience" aria-labelledby="experience-title">
+      <div class="section__head">
+        <span class="section__num" aria-hidden="true">02</span>
+        <h2 class="section__title" id="experience-title">Experience</h2>
+        <span class="section__rule" aria-hidden="true"></span>
+      </div>
+      <div class="section__body" id="experience-body"></div>
+    </section>
+
+    <section class="section" id="projects" aria-labelledby="projects-title">
+      <div class="section__head">
+        <span class="section__num" aria-hidden="true">03</span>
+        <h2 class="section__title" id="projects-title">Projects</h2>
+        <span class="section__rule" aria-hidden="true"></span>
+      </div>
+      <div class="section__body" id="projects-body"></div>
+    </section>
+
+    <section class="section" id="skills" aria-labelledby="skills-title">
+      <div class="section__head">
+        <span class="section__num" aria-hidden="true">04</span>
+        <h2 class="section__title" id="skills-title">Skills</h2>
+        <span class="section__rule" aria-hidden="true"></span>
+      </div>
+      <div class="section__body skills" id="skills-body"></div>
+    </section>
+
+    <section class="section" id="contact" aria-labelledby="contact-title">
+      <div class="section__head">
+        <span class="section__num" aria-hidden="true">05</span>
+        <h2 class="section__title" id="contact-title">Contact</h2>
+        <span class="section__rule" aria-hidden="true"></span>
+      </div>
+      <div class="section__body" id="contact-body"></div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="site-footer__inner">
+      <span id="footer-copy"></span>
+      <a href="#top">← Home</a>
+    </div>
+  </footer>
+
+  <noscript>
+    <p class="content-error">This website needs JavaScript to show its content. Please enable it in your browser.</p>
+  </noscript>
+
+  <!-- content.js = your text.  main.js = builds the page from it. -->
+  <script src="js/content.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>
