@@ -148,6 +148,10 @@ This folder is already a git repository with everything committed.
 
 **Updating the live site later**
 
+If you changed a file in `js/` or `css/`, first open `index.html` and change the three
+`?v=...` numbers (for example to today's date, `?v=2026-12-01`). Otherwise visitors' browsers
+may keep showing the old version for a while.
+
 ```
 git add -A
 git commit -m "Update portfolio"
