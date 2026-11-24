@@ -66,6 +66,13 @@ Tips: JPG files about 1600 pixels wide and under 500 KB load quickly. The file n
 must match the real file exactly, including capital letters and `.jpg` / `.png`.
 Only use pictures you are allowed to publish, especially from an employer.
 
+**Give a project its own story page**
+Add a `cover` picture and a `story` to the project. The card then shows the cover and a
+"Read the story" button, which opens a page with the full story told in chapters, each with its
+own text and captioned pictures. The "Wireless Emergency Stop Button" entry in `js/content.js`
+is a complete example: copy its `cover:` and `story:` lines into another project and change the text.
+Put that project's pictures in their own folder, for example `assets/projects/mars-rover/`.
+
 **Change your introduction**
 Edit `headline` and `intro` in the `profile` block, and the paragraphs in the `about` block.
 

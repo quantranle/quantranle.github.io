@@ -188,6 +188,24 @@ const CONTENT = {
        links    : buttons at the bottom of the card. Use  links: [],  for none.
        images   : pictures of the project (see PICTURES under EXPERIENCE).
                   Put the files in assets/projects. Use  images: [],  for none.
+
+     PROJECT STORY PAGE (optional)
+       A project with a "story" gets its own page: visitors click the card
+       (or "Read the story") to open it. See "Wireless Emergency Stop Button"
+       below for a full example.
+       cover    : one big picture, shown on the card and at the top of the
+                  story page:  cover: { src: "assets/projects/x.jpg", caption: "..." },
+       story    : {
+                    facts:    small table at the top, like the one on the home page
+                    chapters: the story, in order. Each chapter has
+                      heading : its title
+                      text    : one "..." per paragraph
+                      images  : pictures with captions, same as above. Add
+                                wide: true  to show a picture full width and
+                                uncropped (good for schematics and drawings).
+                  }
+       The page address is  index.html#projects/ + the title in lower case
+       with dashes, e.g.  index.html#projects/wireless-emergency-stop-button
      ----------------------------------------------------------------------- */
   projects: [
     {
@@ -251,15 +269,103 @@ const CONTENT = {
       context: "Practical Electronics · Rhine-Waal University of Applied Sciences",
       period: "Oct 2024 – Jan 2025",
       summary:
-        "A wireless emergency stop system for an electric go-cart, designed and prototyped with LoRa (SX1268) and ESP8266-based hardware.",
+        "A handheld emergency stop for the university's electric go-cart, so that a supervisor can stop the cart from outside. Two custom ESP8266 boards, designed in EAGLE and assembled by hand in the university lab.",
       points: [
         "Performed circuit design and PCB layout in EAGLE.",
         "Carried out soldering, assembly and testing, plus battery life and power consumption analysis.",
         "Implemented embedded software in C (Arduino IDE) for reliable wireless communication and emergency signal handling.",
       ],
-      tags: ["LoRa", "ESP8266", "PCB design", "EAGLE", "C"],
-      links: [],
+      tags: ["ESP8266", "Wi-Fi", "LoRa", "PCB design", "EAGLE", "C"],
+      links: [
+        { label: "GitHub", url: "https://github.com/quantranle/WirelessEmergencyStopButton" },
+      ],
       images: [],
+
+      cover: { src: "assets/projects/wireless-e-stop/final-boards.jpg", caption: "The two finished boards: transmitter and receiver" },
+
+      story: {
+        facts: [
+          { label: "Team",     value: "2 students — with Pham Duc Binh" },
+          { label: "Duration", value: "Oct 2024 – Jan 2025" },
+          { label: "Hardware", value: "ESP8266-12F, SX1268 LoRa, CP2102N USB-UART" },
+          { label: "Tools",    value: "EAGLE, Arduino IDE, PlatformIO, reflow oven" },
+        ],
+        chapters: [
+          {
+            heading: "Why we built it",
+            text: [
+              "At a student festival at Rhine-Waal University, students were driving the faculty's electric go-cart around campus under supervision. One driver panicked, lost control of the cart and put the people around them at risk. The cart had an emergency stop button on board — but in that moment of panic the driver did not press it.",
+              "That was the starting point of our project in the Practical Electronics course: an on-board button only helps if the person in the seat can still think clearly. We wanted to give the supervisor standing next to the track a button of their own, so the cart can be stopped from outside.",
+            ],
+            images: [],
+          },
+          {
+            heading: "How it works",
+            text: [
+              "The system has two boards. The transmitter is the handheld part: a mechanical push button, a buzzer, a green and a red LED, running on batteries through a 3.3 V regulator. The receiver sits on the go-cart and is connected to the cart's controller through a digital input/output.",
+              "The transmitter opens its own Wi-Fi access point, and the receiver connects to it. Five times a second the transmitter reports the state of its button. While all is well the green LED is on. When the button is pressed, the message switches to the stop signal: the red LED turns on, the buzzer plays an SOS pattern, and the cart's controller starts its emergency braking sequence and brings the cart to a halt.",
+            ],
+            images: [],
+          },
+          {
+            heading: "Prototyping on the breadboard",
+            text: [
+              "Before designing any board we tested every function on its own on a breadboard: the button, the buzzer, the ESP8266 as Wi-Fi server and as Wi-Fi client, and a sleep mode to save battery. Once each piece worked, we combined them into the transmitter and receiver firmware.",
+              "We also got a LoRa module running on the breadboard, because LoRa reaches much further than Wi-Fi. Putting LoRa into the final design turned out to need much deeper RF knowledge and programming than the semester allowed, so the final firmware uses Wi-Fi — the LoRa transceiver is on the board, ready for a next version.",
+            ],
+            images: [
+              { src: "assets/projects/wireless-e-stop/breadboard-prototype.jpg", caption: "Transmitter and receiver prototyped on breadboards" },
+            ],
+          },
+          {
+            heading: "Schematic and PCB design",
+            text: [
+              "I drew the schematic and laid out the PCB in EAGLE. Next to the ESP8266-12F, the board has a CP2102N USB-to-UART chip so it can be programmed over micro-USB, an SPX1117 regulator for the 3.3 V supply, TVS diodes to protect the USB lines, and a Semtech SX1268 LoRa transceiver with its RF matching network and an SMA antenna connector.",
+              "Many of the parts were not in EAGLE's standard libraries, so we imported footprints from the Component Search Engine and built a small library for the project.",
+            ],
+            images: [
+              { src: "assets/projects/wireless-e-stop/schematic.jpg", caption: "Final schematic", wide: true },
+              { src: "assets/projects/wireless-e-stop/pcb-layout.jpg", caption: "Final PCB layout", wide: true },
+            ],
+          },
+          {
+            heading: "Building the boards",
+            text: [
+              "We assembled the boards ourselves in the university's electronics lab. For the tiny SMD parts, we laid a stencil over the board and spread solder paste through it, placed every component with a pick-and-place machine, and baked the board in a reflow oven so the paste melted and fixed the parts in place. Afterwards we checked every connection with a multimeter.",
+              "The larger through-hole parts — battery holders, button, buzzer, LEDs and pin headers — I soldered by hand.",
+            ],
+            images: [
+              { src: "assets/projects/wireless-e-stop/solder-paste-stencil.jpg", caption: "Stencil for applying solder paste" },
+              { src: "assets/projects/wireless-e-stop/pick-and-place.jpg", caption: "Placing the SMD components" },
+              { src: "assets/projects/wireless-e-stop/reflow-oven.jpg", caption: "The reflow oven" },
+              { src: "assets/projects/wireless-e-stop/reflow-baking.jpg", caption: "The board baking in the oven" },
+              { src: "assets/projects/wireless-e-stop/tht-soldering.jpg", caption: "Soldering the through-hole parts by hand" },
+            ],
+          },
+          {
+            heading: "When it did not work",
+            text: [
+              "The boards powered up over USB, but the laptop did not detect the USB port, even with the correct CP2102N driver installed — so we could not flash the firmware through the on-board USB chip.",
+              "As a workaround we used an external FTDI FT232RL module. It programmed a bare ESP8266 without problems, but once the chip was soldered onto our PCB the FTDI module could no longer program it either. The programming path is the first thing I would design differently in a next version.",
+            ],
+            images: [
+              { src: "assets/projects/wireless-e-stop/ftdi-module.jpg", caption: "The FTDI FT232RL module used as a workaround" },
+            ],
+          },
+          {
+            heading: "The result",
+            text: [
+              "In the end we had two working boards: press the button on the transmitter, and the receiver switches to red and sounds the alarm.",
+              "I measured the power consumption at about 200 mA from a 6 V supply, roughly 1.2 W, which gives a battery life of around 6 hours. That is enough for a test day, but not for a device that should always be ready — so the next steps are a sleep mode to save battery, LoRa for longer range and a more reliable link, one transmitter that can stop several carts or robots at once, and an ergonomic housing that shows battery level and signal strength.",
+            ],
+            images: [
+              { src: "assets/projects/wireless-e-stop/demo-running.gif", caption: "Demo: pressing the button switches the receiver to emergency mode" },
+              { src: "assets/projects/wireless-e-stop/final-boards.jpg", caption: "The finished transmitter and receiver" },
+              { src: "assets/projects/wireless-e-stop/power-measurement.jpg", caption: "Measuring the current draw" },
+            ],
+          },
+        ],
+      },
     },
     {
       title: "Mars Rover",

@@ -664,6 +664,104 @@ img { max-width: 100%; }
 .project--featured .project__foot { grid-area: foot; align-self: end; }
 .project--featured .project__title { font-size: 1.6rem; }
 
+/* A project with a story page: cover picture and a clickable title */
+.project__cover {
+  display: block;
+  margin-bottom: 18px;
+  aspect-ratio: 16 / 9;
+  border: 1px solid var(--border); border-radius: 6px;
+  overflow: hidden;
+  background: var(--hover);
+}
+.project__cover img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 70%; transition: transform 0.5s cubic-bezier(0.2, 0.7, 0.2, 1); }
+.project--story:hover .project__cover img { transform: scale(1.03); }
+.project__title a { text-decoration: none; }
+.project__title a:hover { color: var(--accent); }
+
+/* --- Project story page -------------------------------------------------- */
+
+.story__back { margin-bottom: clamp(24px, 4vw, 36px); }
+
+.story__head {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(280px, 1fr);
+  gap: clamp(28px, 5vw, 64px);
+  align-items: start;
+}
+.story__eyebrow {
+  font-family: var(--font-mono); font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase;
+}
+.story__title { margin-top: 12px; font-size: clamp(2rem, 1.4rem + 2.6vw, 3.2rem); line-height: 1.05; letter-spacing: -0.03em; }
+.story__context { margin-top: 10px; color: var(--faint); }
+.story__summary { margin-top: 18px; max-width: 36em; font-size: 1.12rem; line-height: 1.6; text-wrap: pretty; }
+.story__intro .tags { margin-top: 22px; }
+.story__intro .project__links { margin-top: 16px; }
+
+.story__facts {
+  border: 1px solid var(--border-strong); border-radius: 10px;
+  background: var(--card);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.story__cover {
+  display: block; width: 100%; padding: 0;
+  margin-top: clamp(32px, 5vw, 56px);
+  aspect-ratio: 21 / 9;
+  border: 1px solid var(--border-strong); border-radius: 10px;
+  background: var(--hover);
+  overflow: hidden; cursor: zoom-in;
+}
+.story__cover img { display: block; width: 100%; height: 100%; object-fit: cover; object-position: center 60%; }
+
+/* Each chapter: number and heading on the left, text and pictures on the right */
+.story__chapters { margin-top: clamp(40px, 6vw, 72px); }
+
+.chapter {
+  display: grid;
+  grid-template-columns: 240px minmax(0, 1fr);
+  gap: 24px clamp(28px, 5vw, 64px);
+  padding-block: clamp(28px, 4vw, 44px);
+  border-top: 1px solid var(--border);
+}
+.chapter__head { position: sticky; top: 88px; align-self: start; }
+.chapter__num { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); }
+.chapter__title { margin: 6px 0 0; font-size: 1.35rem; font-weight: 650; letter-spacing: -0.01em; }
+.chapter__body > p { max-width: 40em; color: var(--muted); text-wrap: pretty; }
+.chapter__body > p + p { margin-top: 1em; }
+
+/* Pictures with captions inside a chapter */
+.figures {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-top: 24px;
+}
+.figures--single { grid-template-columns: minmax(0, 1fr); max-width: 40em; }
+.figure { margin: 0; }
+.figure--wide { grid-column: 1 / -1; }
+.figure__frame {
+  display: block; width: 100%; padding: 0;
+  aspect-ratio: 4 / 3;
+  border: 1px solid var(--border); border-radius: 6px;
+  background: var(--hover);
+  overflow: hidden; cursor: zoom-in;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.figure__frame:hover { border-color: var(--accent); transform: translateY(-2px); }
+.figure__frame img { display: block; width: 100%; height: 100%; object-fit: cover; }
+/* A picture alone in its chapter keeps its own shape */
+.figures--single .figure__frame { aspect-ratio: auto; }
+.figures--single .figure__frame img { height: auto; max-height: 520px; object-fit: contain; }
+/* Wide pictures (schematics, drawings) are shown whole, on white */
+.figure--wide .figure__frame { aspect-ratio: auto; background: #fff; }
+.figure--wide .figure__frame img { height: auto; object-fit: contain; }
+.figure__caption {
+  margin-top: 8px;
+  font-family: var(--font-mono); font-size: 0.76rem; line-height: 1.5;
+  color: var(--faint);
+}
+
 /* --- Skills -------------------------------------------------------------- */
 
 .skills { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; }
@@ -759,6 +857,12 @@ img { max-width: 100%; }
     row-gap: 20px;
   }
   .project--featured .project__points { padding: 20px 0 0; border-left: 0; border-top: 1px solid var(--border); }
+
+  .story__head { grid-template-columns: minmax(0, 1fr); }
+  .story__facts { max-width: 520px; }
+  .story__cover { aspect-ratio: 16 / 9; }
+  .chapter { grid-template-columns: minmax(0, 1fr); gap: 14px; }
+  .chapter__head { position: static; }
 }
 
 @media (max-width: 760px) {
@@ -802,6 +906,10 @@ img { max-width: 100%; }
   .facts dd { padding-right: 16px; }
 
   .contact__actions .btn { flex: 1 1 auto; justify-content: center; }
+
+  .story__cover { aspect-ratio: 4 / 3; }
+  .figures { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+  .figures--single { grid-template-columns: minmax(0, 1fr); }
 
   .lightbox { padding: 64px 12px 76px; }
   .lightbox__nav--prev, .lightbox__nav--next { top: auto; bottom: 16px; }

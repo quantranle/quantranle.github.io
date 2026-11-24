@@ -301,6 +301,107 @@
     );
   }
 
+  /* ---------- Project story pages ------------------------------------------ */
+
+  /* "Wireless Emergency Stop Button" -> "wireless-emergency-stop-button" */
+  function slugOf(p) {
+    return p.slug || p.title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  }
+
+  function storyHref(p) {
+    return "#projects/" + slugOf(p);
+  }
+
+  function hasStory(p) {
+    return !!(p.story && p.story.chapters && p.story.chapters.length);
+  }
+
+  function coverOf(p) {
+    if (!p.cover) return null;
+    return typeof p.cover === "string" ? { src: p.cover, caption: "" } : p.cover;
+  }
+
+  /* One picture with its caption underneath. Clicking it opens the viewer
+     on that picture, and the arrows go through every picture of the story. */
+  function storyFigure(image, all, title) {
+    const index = all.indexOf(image);
+    const button = h("button", { class: "figure__frame", type: "button", title: "Click to enlarge" },
+      h("img", { src: image.src, alt: image.caption || title, loading: "lazy" }));
+    button.addEventListener("click", () => openLightbox(all, index, title));
+    return h("figure", { class: "figure" + (image.wide ? " figure--wide" : "") },
+      button,
+      image.caption ? h("figcaption", { class: "figure__caption", text: image.caption }) : null);
+  }
+
+  function storyPage(p) {
+    const story = p.story;
+    const cover = coverOf(p);
+    const chapters = story.chapters.map((chapter) => ({ ...chapter, images: imagesOf(chapter) }));
+    // Every picture of the story in reading order, for the viewer's arrows.
+    const all = chapters.flatMap((chapter) => chapter.images);
+    const coverImage = cover ? (all.find((image) => image.src === cover.src) || cover) : null;
+    if (coverImage && !all.includes(coverImage)) all.unshift(coverImage);
+    const hasLinks = p.links && p.links.length;
+
+    const back = () => h("a", { class: "btn btn--small", href: "#projects", "data-magnetic": "0.2" },
+      icon("arrowLeft"), h("span", { text: "All projects" }));
+
+    let coverFigure = null;
+    if (coverImage) {
+      const frame = h("button", { class: "story__cover", type: "button", title: "Click to enlarge" },
+        h("img", { src: coverImage.src, alt: coverImage.caption || p.title }));
+      frame.addEventListener("click", () => openLightbox(all, all.indexOf(coverImage), p.title));
+      coverFigure = frame;
+    }
+
+    return h("section", {
+      class: "section story",
+      id: "projects/" + slugOf(p),
+      "data-parent": "projects",
+      "aria-label": p.title,
+    },
+      h("div", { class: "story__back" }, back()),
+
+      h("header", { class: "story__head" },
+        h("div", { class: "story__intro" },
+          h("p", { class: "story__eyebrow" },
+            h("span", { class: "project__category", text: p.category || "" }),
+            p.period ? h("span", { class: "eyebrow__sep", text: "//", "aria-hidden": "true" }) : null,
+            p.period ? h("span", { class: "project__date", text: p.period }) : null),
+          h("h2", { class: "section__title story__title", text: p.title }),
+          p.context ? h("p", { class: "story__context", text: p.context }) : null,
+          h("p", { class: "story__summary", text: p.summary }),
+          tagList(p.tags),
+          hasLinks ? h("div", { class: "project__links" }, p.links.map((link) => linkButton(link, "btn--small"))) : null),
+        story.facts && story.facts.length
+          ? h("dl", { class: "facts story__facts" }, story.facts.map((fact) =>
+              h("div", { class: "facts__row" }, h("dt", { text: fact.label }), h("dd", { text: fact.value }))))
+          : null),
+
+      coverFigure,
+
+      h("div", { class: "story__chapters" }, chapters.map((chapter, i) =>
+        h("section", { class: "chapter" },
+          h("div", { class: "chapter__head" },
+            h("span", { class: "chapter__num", text: String(i + 1).padStart(2, "0") }),
+            h("h3", { class: "chapter__title", text: chapter.heading })),
+          h("div", { class: "chapter__body" },
+            (chapter.text || []).map((text) => h("p", { text })),
+            chapter.images.length
+              ? h("div", { class: "figures" + (chapter.images.length === 1 ? " figures--single" : "") },
+                  chapter.images.map((image) => storyFigure(image, all, p.title)))
+              : null)))),
+
+      h("nav", { class: "pager", "aria-label": "Back to projects" },
+        back(),
+        hasLinks ? linkButton(p.links[0]) : null));
+  }
+
+  function renderStories() {
+    const main = $("main");
+    C.projects.filter(hasStory).forEach((p) => main.append(storyPage(p)));
+  }
+
   function projectCard(p) {
     const hasPoints = p.points && p.points.length;
     let details = null;
@@ -314,27 +415,38 @@
         pointList(p.points));
     }
 
-    const hasLinks = p.links && p.links.length;
+    const story = hasStory(p);
+    const cover = coverOf(p);
+    const linkButtons = (p.links || []).map((link) => linkButton(link, "btn--small"));
+    if (story) {
+      linkButtons.unshift(h("a", { class: "btn btn--small btn--primary", href: storyHref(p), "data-magnetic": "0.2" },
+        h("span", { text: "Read the story" }), icon("arrowRight")));
+    }
     const hasTags = p.tags && p.tags.length;
 
     return h("article", {
-      class: "project" + (p.featured ? " project--featured" : ""),
+      class: "project" + (p.featured ? " project--featured" : "") + (story ? " project--story" : ""),
       "data-category": p.category || "",
       "data-spotlight": true,
     },
       h("div", { class: "project__main" },
+        cover && story
+          ? h("a", { class: "project__cover", href: storyHref(p), tabindex: "-1", "aria-hidden": "true" },
+              h("img", { src: cover.src, alt: "", loading: "lazy" }))
+          : null,
         h("p", { class: "project__top" },
           h("span", { class: "project__category", text: p.category || "" }),
           h("span", { class: "project__date", text: p.period || "" })),
-        h("h3", { class: "project__title", text: p.title }),
+        h("h3", { class: "project__title" },
+          story ? h("a", { href: storyHref(p), text: p.title }) : p.title),
         p.context ? h("p", { class: "project__context", text: p.context }) : null,
         h("p", { class: "project__summary", text: p.summary }),
         gallery(p, p.title)),
       details,
-      hasTags || hasLinks
+      hasTags || linkButtons.length
         ? h("div", { class: "project__foot" },
             tagList(p.tags),
-            hasLinks ? h("div", { class: "project__links" }, p.links.map((link) => linkButton(link, "btn--small"))) : null)
+            linkButtons.length ? h("div", { class: "project__links" }, linkButtons) : null)
         : null);
   }
 
@@ -518,8 +630,10 @@
       void page.offsetWidth;                   // restarts the entrance animation
       page.classList.add("is-entering");
 
+      // A project story page keeps "Projects" highlighted in the nav.
+      const navId = page.dataset.parent || page.id;
       links.forEach((link) => {
-        const active = link.getAttribute("href") === "#" + page.id;
+        const active = link.getAttribute("href") === "#" + navId;
         link.classList.toggle("is-active", active);
         if (active) {
           link.setAttribute("aria-current", "page");
@@ -552,6 +666,7 @@
   renderAbout();
   renderExperience();
   renderProjects();
+  renderStories();
   renderSkills();
   renderContact();
   renderFooter();
