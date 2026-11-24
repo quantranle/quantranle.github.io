@@ -267,7 +267,9 @@ const CONTENT = {
         { label: "Publication", url: "https://wjarr.com/content/mouth-detector-combination-between-lipnet-and-pyimagesearch" },
         { label: "GitHub", url: "https://github.com/quantranle/MouthDetector" },
       ],
-      images: [],
+      images: [
+        { src: "assets/projects/mouth-detector/realtime-demo.gif", caption: "Real-time demo: the mouth aspect ratio (MAR) is measured live, and the app shows when the mouth is open" },
+      ],
     },
     {
       title: "Wireless Emergency Stop Button",
