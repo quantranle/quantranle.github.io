@@ -20,52 +20,65 @@
    changes everywhere.
    ------------------------------------------------------------------------- */
 
-/* Dark theme: dark navy */
+/* Dark theme: warm charcoal */
 :root {
   color-scheme: dark;
 
-  --bg: #0a1424;             /* page background */
-  --card: #0f1c32;           /* boxes and cards */
-  --border: #1d2e4b;         /* thin lines */
-  --border-strong: #2b4063;  /* button and box outlines */
-  --text: #e8eef7;           /* main text */
-  --muted: #a5b3c9;          /* secondary text */
-  --faint: #7c8dab;          /* dates and small labels */
-  --accent: #e8eef7;         /* highlight colour (same as the text, for a quiet look) */
-  --accent-ink: #0a1424;     /* text on top of the highlight colour */
-  --ok: #4ade80;             /* status dot */
+  --bg: #1c1b18;             /* page background */
+  --card: #252420;           /* boxes and cards */
+  --border: #34322c;         /* thin lines */
+  --border-strong: #48453d;  /* button and box outlines */
+  --text: #efece4;           /* main text */
+  --muted: #bdb8ac;          /* secondary text */
+  --faint: #918c80;          /* dates and small labels */
+  --accent: #efece4;         /* highlight colour (same as the text, for a quiet look) */
+  --accent-ink: #1c1b18;     /* text on top of the highlight colour */
+  --ok: #6cc47a;             /* status dot */
 
-  --accent-soft: rgba(255, 255, 255, 0.06);
-  --accent-glow: rgba(0, 0, 0, 0.45);
+  /* Colour blocks: the thin bands on cards and the category squares */
+  --c-yellow: #e7cf83;
+  --c-green: #4fa85e;
+  --c-sage: #9fbdb4;
+  --c-blue: #6b9fd6;
+  --c-sand: #b9ad98;
+
+  --accent-soft: rgba(255, 255, 255, 0.05);
+  --accent-glow: rgba(0, 0, 0, 0.5);
   --hover: rgba(255, 255, 255, 0.05);
-  --header-bg: rgba(10, 20, 36, 0.82);
-  --glow-a: rgba(255, 255, 255, 0.03);
-  --glow-b: rgba(48, 102, 196, 0.16);
+  --header-bg: rgba(28, 27, 24, 0.85);
+  --glow-a: rgba(231, 207, 131, 0.05);
+  --glow-b: rgba(159, 189, 180, 0.06);
   --shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.8);
 }
 
-/* Light theme: light grey */
+/* Light theme: warm paper */
 :root[data-theme="light"] {
   color-scheme: light;
 
-  --bg: #e8eaee;
-  --card: #f5f6f8;
-  --border: #d2d7df;
-  --border-strong: #b4bcc9;
-  --text: #0f1b30;
-  --muted: #424f67;
-  --faint: #5b677f;
-  --accent: #0f1b30;
-  --accent-ink: #ffffff;
-  --ok: #15803d;
+  --bg: #f6f4ee;
+  --card: #fcfbf8;
+  --border: #e4e0d5;
+  --border-strong: #cdc8ba;
+  --text: #1f1e1b;
+  --muted: #5a574f;
+  --faint: #7d796e;
+  --accent: #1f1e1b;
+  --accent-ink: #f6f4ee;
+  --ok: #3e9b4f;
 
-  --accent-soft: rgba(15, 27, 48, 0.05);
-  --accent-glow: rgba(15, 27, 48, 0.25);
-  --hover: rgba(15, 27, 48, 0.06);
-  --header-bg: rgba(232, 234, 238, 0.84);
-  --glow-a: rgba(255, 255, 255, 0.5);
-  --glow-b: rgba(255, 255, 255, 0.75);
-  --shadow: 0 20px 40px -26px rgba(15, 27, 48, 0.45);
+  --c-yellow: #f5dc8e;
+  --c-green: #4caf5d;
+  --c-sage: #bfd8d0;
+  --c-blue: #6b9fd6;
+  --c-sand: #e3d9c9;
+
+  --accent-soft: rgba(31, 30, 27, 0.05);
+  --accent-glow: rgba(31, 30, 27, 0.22);
+  --hover: rgba(31, 30, 27, 0.05);
+  --header-bg: rgba(246, 244, 238, 0.86);
+  --glow-a: rgba(245, 220, 142, 0.18);
+  --glow-b: rgba(191, 216, 208, 0.22);
+  --shadow: 0 20px 40px -26px rgba(31, 30, 27, 0.35);
 }
 
 /* Fonts and sizes shared by both themes */
@@ -114,7 +127,7 @@ a { color: inherit; }
 img { max-width: 100%; }
 
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 4px; }
-::selection { background: var(--accent); color: var(--accent-ink); }
+::selection { background: var(--c-yellow); color: #1f1e1b; }
 
 /* Mouse pointer: a small robot hand. It turns dark over things you can click.
    The pictures are assets/cursor-hand.svg and assets/cursor-click.svg. */
@@ -443,6 +456,17 @@ a, button, summary, [role="button"] { cursor: url("../assets/cursor-click.svg") 
 }
 .jump:hover { border-color: var(--accent); box-shadow: 0 18px 32px -20px var(--accent-glow); }
 
+/* A thin colour band along the top of each big button */
+.jump::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px;
+  background: var(--band, var(--c-sand));
+}
+.jump:nth-child(5n+1) { --band: var(--c-yellow); }
+.jump:nth-child(5n+2) { --band: var(--c-green); }
+.jump:nth-child(5n+3) { --band: var(--c-sage); }
+.jump:nth-child(5n+4) { --band: var(--c-blue); }
+.jump:nth-child(5n+5) { --band: var(--c-sand); }
+
 .jump__num { grid-area: num; font-family: var(--font-mono); font-size: 0.76rem; color: var(--accent); }
 .jump__arrow { grid-area: arrow; color: var(--faint); transition: transform 0.3s, color 0.2s; }
 .jump:hover .jump__arrow { color: var(--accent); transform: translateX(4px); }
@@ -641,6 +665,19 @@ a, button, summary, [role="button"] { cursor: url("../assets/cursor-click.svg") 
   font-family: var(--font-mono); font-size: 0.74rem; letter-spacing: 0.06em; text-transform: uppercase;
 }
 .project__category { color: var(--accent); }
+/* A small colour square before the category; each category has its own colour */
+.project__category::before,
+.filter__swatch {
+  content: ""; display: inline-block; flex: none;
+  width: 9px; height: 9px; margin-right: 8px; border-radius: 2px;
+  background: var(--cat, var(--c-sand));
+  vertical-align: 0;
+}
+.filter__swatch { margin-right: 0; }
+.project::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px;
+  background: var(--cat, var(--c-sand));
+}
 .project__date { color: var(--faint); white-space: nowrap; }
 
 .project__title { margin: 10px 0 0; font-size: 1.3rem; font-weight: 650; letter-spacing: -0.01em; }
@@ -784,6 +821,16 @@ a, button, summary, [role="button"] { cursor: url("../assets/cursor-click.svg") 
   border: 1px solid var(--border); border-radius: var(--radius);
   background: var(--card);
 }
+.skill-group { position: relative; overflow: hidden; }
+.skill-group::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 4px;
+  background: var(--band, var(--c-sand));
+}
+.skill-group:nth-child(5n+1) { --band: var(--c-blue); }
+.skill-group:nth-child(5n+2) { --band: var(--c-green); }
+.skill-group:nth-child(5n+3) { --band: var(--c-yellow); }
+.skill-group:nth-child(5n+4) { --band: var(--c-sage); }
+.skill-group:nth-child(5n+5) { --band: var(--c-sand); }
 .skill-group .label { margin-bottom: 14px; }
 
 .chips { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }

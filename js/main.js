@@ -332,6 +332,16 @@
     );
   }
 
+  /* Each project category gets its own colour, in the order the categories
+     first appear in content.js. The colours are set at the top of style.css. */
+  const CATEGORY_COLOURS = ["var(--c-yellow)", "var(--c-green)", "var(--c-blue)", "var(--c-sage)", "var(--c-sand)"];
+
+  function categoryStyle(category) {
+    const categories = Array.from(new Set(C.projects.map((p) => p.category).filter(Boolean)));
+    const i = categories.indexOf(category);
+    return i < 0 ? null : "--cat: " + CATEGORY_COLOURS[i % CATEGORY_COLOURS.length];
+  }
+
   /* ---------- Project story pages ------------------------------------------ */
 
   /* "Wireless Emergency Stop Button" -> "wireless-emergency-stop-button" */
@@ -390,6 +400,7 @@
       id: "projects/" + slugOf(p),
       "data-parent": "projects",
       "aria-label": p.title,
+      style: categoryStyle(p.category),
     },
       h("div", { class: "story__back" }, back()),
 
@@ -459,6 +470,7 @@
       class: "project" + (p.featured ? " project--featured" : "") + (story ? " project--story" : ""),
       "data-category": p.category || "",
       "data-spotlight": true,
+      style: categoryStyle(p.category),
     },
       h("div", { class: "project__main" },
         cover && story
@@ -496,7 +508,10 @@
             "data-filter": i === 0 ? "*" : name,
             "aria-pressed": i === 0 ? "true" : "false",
             "data-magnetic": "0.2",
-          }, name, h("span", { class: "filter__count", text: String(count) }));
+            style: i === 0 ? null : categoryStyle(name),
+          },
+          i === 0 ? null : h("span", { class: "filter__swatch", "aria-hidden": "true" }),
+          name, h("span", { class: "filter__count", text: String(count) }));
         })));
     }
 
