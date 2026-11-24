@@ -834,53 +834,69 @@ img { max-width: 100%; }
   animation-delay: calc(var(--i, 0) * 70ms + 60ms);
 }
 
-/* Robot arm: rises from the bottom right corner, waves, then goes away.
-   Change --arm-delay to make it appear sooner or later. */
+/* Robot arm: rises from the bottom right corner, waves, then goes away,
+   and comes back every 15 seconds.
+   --arm-delay  = when it first appears after the page opens
+   --arm-cycle  = time from one visit to the next (if you change it, the
+                  wave itself gets longer or shorter by the same factor) */
 .hello-arm {
   --arm-delay: 1.2s;
-  position: fixed; right: 28px; bottom: 0; z-index: 5;
-  width: 96px; height: auto; overflow: visible;
+  --arm-cycle: 15s;
+  position: fixed; right: 32px; bottom: 0; z-index: 5;
+  width: 140px; height: auto; overflow: visible;
   pointer-events: none;
   opacity: 0; visibility: hidden;
-  animation: arm-visit 5.2s ease-in-out var(--arm-delay) forwards;
+  animation: arm-visit var(--arm-cycle) ease-in-out var(--arm-delay) infinite both;
 }
 .hello-arm__part { fill: var(--card); stroke: var(--text); stroke-width: 2; }
 .hello-arm__line { fill: none; stroke: var(--text); stroke-width: 2.5; stroke-linecap: round; }
 .hello-arm__hi {
   font-family: var(--font-mono); font-size: 14px; fill: var(--muted);
-  opacity: 0;
-  animation: arm-hi 5.2s ease var(--arm-delay) forwards;
+  animation: arm-hi var(--arm-cycle) ease var(--arm-delay) infinite both;
 }
 .hello-arm__upper,
 .hello-arm__fore,
 .hello-arm__hand { transform-box: view-box; }
-.hello-arm__upper { transform-origin: 60px 110px; animation: arm-raise 5.2s ease-in-out var(--arm-delay) forwards; }
-.hello-arm__fore  { transform-origin: 60px 64px;  animation: arm-wave 0.55s ease-in-out calc(var(--arm-delay) + 1.3s) 5 alternate both; }
-.hello-arm__hand  { transform-origin: 60px 25px;  animation: arm-grip 0.55s ease-in-out calc(var(--arm-delay) + 1.3s) 5 alternate both; }
+.hello-arm__upper { transform-origin: 60px 110px; animation: arm-raise var(--arm-cycle) ease-in-out var(--arm-delay) infinite both; }
+.hello-arm__fore  { transform-origin: 60px 64px;  animation: arm-wave  var(--arm-cycle) ease-in-out var(--arm-delay) infinite both; }
+.hello-arm__hand  { transform-origin: 60px 25px;  animation: arm-grip  var(--arm-cycle) ease-in-out var(--arm-delay) infinite both; }
 
+/* One visit lasts about the first 35% of the cycle; the rest is a pause. */
 @keyframes arm-visit {
-  0%   { opacity: 0; visibility: visible; transform: translateY(105%); }
-  14%  { opacity: 1; transform: none; }
-  84%  { opacity: 1; transform: none; }
-  100% { opacity: 0; visibility: hidden; transform: translateY(105%); }
+  0%          { opacity: 0; visibility: visible; transform: translateY(105%); }
+  4.7%        { opacity: 1; transform: none; }
+  29.3%       { opacity: 1; transform: none; }
+  34.7%, 100% { opacity: 0; visibility: hidden; transform: translateY(105%); }
 }
 @keyframes arm-raise {
-  0%, 12% { transform: rotate(0deg); }
-  22%, 78% { transform: rotate(-14deg); }
-  88%, 100% { transform: rotate(0deg); }
+  0%, 4%      { transform: rotate(0deg); }
+  7.3%, 26.7% { transform: rotate(-14deg); }
+  30.7%, 100% { transform: rotate(0deg); }
 }
 @keyframes arm-wave {
-  from { transform: rotate(-22deg); }
-  to   { transform: rotate(24deg); }
+  0%, 7.3%    { transform: rotate(0deg); }
+  8.7%        { transform: rotate(-22deg); }
+  12.3%       { transform: rotate(24deg); }
+  16%         { transform: rotate(-22deg); }
+  19.7%       { transform: rotate(24deg); }
+  23.3%       { transform: rotate(-22deg); }
+  27%         { transform: rotate(24deg); }
+  30.7%, 100% { transform: rotate(0deg); }
 }
 @keyframes arm-grip {
-  from { transform: rotate(8deg); }
-  to   { transform: rotate(-8deg); }
+  0%, 7.3%    { transform: rotate(0deg); }
+  8.7%        { transform: rotate(8deg); }
+  12.3%       { transform: rotate(-8deg); }
+  16%         { transform: rotate(8deg); }
+  19.7%       { transform: rotate(-8deg); }
+  23.3%       { transform: rotate(8deg); }
+  27%         { transform: rotate(-8deg); }
+  30.7%, 100% { transform: rotate(0deg); }
 }
 @keyframes arm-hi {
-  0%, 22% { opacity: 0; }
-  30%, 76% { opacity: 1; }
-  84%, 100% { opacity: 0; }
+  0%, 7.3%    { opacity: 0; }
+  10.7%, 26.7% { opacity: 1; }
+  29.3%, 100% { opacity: 0; }
 }
 
 /* People who ask their computer for less animation get none */
@@ -960,6 +976,7 @@ img { max-width: 100%; }
   .figures--single { grid-template-columns: minmax(0, 1fr); }
 
   .lightbox { padding: 64px 12px 76px; }
+  .hello-arm { width: 104px; right: 12px; }
   .lightbox__nav--prev, .lightbox__nav--next { top: auto; bottom: 16px; }
   .lightbox__nav--prev { left: calc(50% - 52px); }
   .lightbox__nav--next { right: calc(50% - 52px); }
