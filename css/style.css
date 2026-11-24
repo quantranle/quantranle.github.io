@@ -127,6 +127,12 @@ img { max-width: 100%; }
 }
 .skip-link:focus { top: 12px; }
 
+/* Text only screen readers see */
+.visually-hidden {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+
 .icon { display: inline-flex; flex: none; }
 .icon svg { display: block; width: 1.1em; height: 1.1em; }
 
@@ -385,6 +391,10 @@ img { max-width: 100%; }
   color: var(--accent);
 }
 .eyebrow__sep { margin-inline: 0.7em; color: var(--faint); }
+
+/* "> Mechatronics Engineer_" typed out like a terminal prompt */
+.prompt__sign { margin-right: 0.6em; color: var(--faint); }
+.prompt__cursor { margin-left: 0.1em; animation: blink 1.1s steps(1) infinite; }
 .eyebrow__place { color: var(--faint); }
 
 .hero__name {
@@ -523,6 +533,18 @@ img { max-width: 100%; }
   margin-bottom: clamp(26px, 4vw, 40px);
 }
 .section__num { font-family: var(--font-mono); font-size: 0.85rem; color: var(--accent); }
+.section__num::before,
+.jump__num::before { content: "["; color: var(--faint); }
+.section__num::after,
+.jump__num::after { content: "]"; color: var(--faint); }
+
+/* The faint folder path above each page title: ~/portfolio/projects */
+.section__path {
+  margin-bottom: 10px;
+  font-family: var(--font-mono); font-size: 0.76rem;
+  color: var(--faint);
+  overflow-wrap: anywhere;
+}
 .section__title {
   margin: 0;
   font-size: clamp(1.5rem, 1.2rem + 1.2vw, 2.1rem);
@@ -647,6 +669,10 @@ img { max-width: 100%; }
 .project__details .points { margin-top: 12px; font-size: 0.95rem; }
 
 .project__foot { margin-top: auto; display: grid; gap: 14px; }
+
+/* "stack:" in front of the technology labels on a project card */
+.stack { display: flex; align-items: baseline; gap: 10px; }
+.stack__label { flex: none; font-family: var(--font-mono); font-size: 0.74rem; color: var(--faint); }
 .project__links { display: flex; flex-wrap: wrap; gap: 8px; }
 
 /* The featured project is full width, with its details always visible */
@@ -813,6 +839,7 @@ img { max-width: 100%; }
   font-family: var(--font-mono); font-size: 0.8rem; color: var(--faint);
 }
 .site-footer a { text-decoration: none; }
+.footer-sig { opacity: 0.7; }
 .site-footer a:hover { color: var(--accent); }
 
 
@@ -823,6 +850,10 @@ img { max-width: 100%; }
 @keyframes rise {
   from { opacity: 0; transform: translateY(14px); }
   to   { opacity: 1; transform: none; }
+}
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0; }
 }
 @keyframes pulse {
   0%   { box-shadow: 0 0 0 0 currentColor; }

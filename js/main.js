@@ -245,7 +245,13 @@
     $("#top").append(
       h("div", { class: "hero__text" },
         h("p", { class: "eyebrow enter", style: "--i:0" },
-          h("span", { text: p.role }),
+          // "> Mechatronics Engineer_" typed out like a terminal prompt.
+          // Screen readers get the plain role from the hidden span.
+          h("span", { class: "prompt" },
+            h("span", { class: "prompt__sign", text: ">", "aria-hidden": "true" }),
+            h("span", { class: "visually-hidden", text: p.role }),
+            h("span", { class: "prompt__text", "data-type": p.role, "aria-hidden": "true" }),
+            h("span", { class: "prompt__cursor", text: "_", "aria-hidden": "true" })),
           p.location ? h("span", { class: "eyebrow__sep", text: "//", "aria-hidden": "true" }) : null,
           p.location ? h("span", { class: "eyebrow__place", text: p.location }) : null),
         h("h1", { class: "hero__name enter", style: "--i:1", text: p.name }),
@@ -383,7 +389,8 @@
       h("div", { class: "story__chapters" }, chapters.map((chapter, i) =>
         h("section", { class: "chapter" },
           h("div", { class: "chapter__head" },
-            h("span", { class: "chapter__num", text: String(i + 1).padStart(2, "0") }),
+            // Chapters are numbered in hex: 0x01, 0x02, ...
+            h("span", { class: "chapter__num", text: "0x" + (i + 1).toString(16).toUpperCase().padStart(2, "0") }),
             h("h3", { class: "chapter__title", text: chapter.heading })),
           h("div", { class: "chapter__body" },
             (chapter.text || []).map((text) => h("p", { text })),
@@ -445,7 +452,12 @@
       details,
       hasTags || linkButtons.length
         ? h("div", { class: "project__foot" },
-            tagList(p.tags),
+            // "stack:" in front of the technology labels
+            hasTags
+              ? h("div", { class: "stack" },
+                  h("span", { class: "stack__label", text: "stack:", "aria-hidden": "true" }),
+                  tagList(p.tags))
+              : null,
             linkButtons.length ? h("div", { class: "project__links" }, linkButtons) : null)
         : null);
   }
@@ -496,6 +508,31 @@
 
   function renderFooter() {
     $("#footer-copy").textContent = "© " + new Date().getFullYear() + " " + C.profile.name;
+    // A small code-comment signature in the middle of the footer.
+    $("#footer-copy").after(h("span", { class: "footer-sig", "aria-hidden": "true",
+      text: "/* EOF :: " + (C.profile.initials || "") + " */" }));
+  }
+
+  /* A faint folder path above each page title, like a terminal:
+     ~/portfolio/projects, ~/portfolio/projects/wireless-emergency-stop-button */
+  function renderPaths() {
+    $$("main > .section").forEach((page) => {
+      page.prepend(h("p", { class: "section__path", "aria-hidden": "true", text: "~/portfolio/" + page.id }));
+    });
+  }
+
+  /* Types the home page role out letter by letter after the ">" prompt.
+     People who ask their computer for less animation see it all at once. */
+  function initTyping() {
+    $$("[data-type]").forEach((el) => {
+      const text = el.dataset.type;
+      if (prefersReducedMotion) { el.textContent = text; return; }
+      let shown = 0;
+      setTimeout(function next() {
+        el.textContent = text.slice(0, ++shown);
+        if (shown < text.length) setTimeout(next, 55);
+      }, 450);
+    });
   }
 
   /* "Previous / next" buttons at the bottom of each page, in nav order. */
@@ -667,6 +704,7 @@
   renderExperience();
   renderProjects();
   renderStories();
+  renderPaths();
   renderSkills();
   renderContact();
   renderFooter();
@@ -677,4 +715,5 @@
   initSpotlight();
   initFilters();
   initPages();
+  initTyping();
 })();
