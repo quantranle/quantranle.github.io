@@ -285,7 +285,7 @@ const CONTENT = {
 
       story: {
         facts: [
-          { label: "Team",     value: "2 students — with Pham Duc Binh" },
+          { label: "Team",     value: "2 students, with Pham Duc Binh" },
           { label: "Duration", value: "Oct 2024 – Jan 2025" },
           { label: "Hardware", value: "ESP8266-12F, SX1268 LoRa, CP2102N USB-UART" },
           { label: "Tools",    value: "EAGLE, Arduino IDE, PlatformIO, reflow oven" },
@@ -294,7 +294,7 @@ const CONTENT = {
           {
             heading: "Why we built it",
             text: [
-              "At a student festival at Rhine-Waal University, students were driving the faculty's electric go-cart around campus under supervision. One driver panicked, lost control of the cart and put the people around them at risk. The cart had an emergency stop button on board — but in that moment of panic the driver did not press it.",
+              "At a student festival at Rhine-Waal University, students were driving the faculty's electric go-cart around campus under supervision. One driver panicked, lost control of the cart and put the people around them at risk. The cart had an emergency stop button on board, but in that moment of panic the driver did not press it.",
               "That was the starting point of our project in the Practical Electronics course: an on-board button only helps if the person in the seat can still think clearly. We wanted to give the supervisor standing next to the track a button of their own, so the cart can be stopped from outside.",
             ],
             images: [],
@@ -311,7 +311,7 @@ const CONTENT = {
             heading: "Prototyping on the breadboard",
             text: [
               "Before designing any board we tested every function on its own on a breadboard: the button, the buzzer, the ESP8266 as Wi-Fi server and as Wi-Fi client, and a sleep mode to save battery. Once each piece worked, we combined them into the transmitter and receiver firmware.",
-              "We also got a LoRa module running on the breadboard, because LoRa reaches much further than Wi-Fi. Putting LoRa into the final design turned out to need much deeper RF knowledge and programming than the semester allowed, so the final firmware uses Wi-Fi — the LoRa transceiver is on the board, ready for a next version.",
+              "We also got a LoRa module running on the breadboard, because LoRa reaches much further than Wi-Fi. Putting LoRa into the final design turned out to need much deeper RF knowledge and programming than the semester allowed, so the final firmware uses Wi-Fi. The LoRa transceiver is still on the board, ready for a next version.",
             ],
             images: [
               { src: "assets/projects/wireless-e-stop/breadboard-prototype.jpg", caption: "Transmitter and receiver prototyped on breadboards" },
@@ -332,7 +332,7 @@ const CONTENT = {
             heading: "Building the boards",
             text: [
               "We assembled the boards ourselves in the university's electronics lab. For the tiny SMD parts, we laid a stencil over the board and spread solder paste through it, placed every component with a pick-and-place machine, and baked the board in a reflow oven so the paste melted and fixed the parts in place. Afterwards we checked every connection with a multimeter.",
-              "The larger through-hole parts — battery holders, button, buzzer, LEDs and pin headers — I soldered by hand.",
+              "I soldered the larger through-hole parts by hand: the battery holders, button, buzzer, LEDs and pin headers.",
             ],
             images: [
               { src: "assets/projects/wireless-e-stop/solder-paste-stencil.jpg", caption: "Stencil for applying solder paste" },
@@ -345,7 +345,7 @@ const CONTENT = {
           {
             heading: "When it did not work",
             text: [
-              "The boards powered up over USB, but the laptop did not detect the USB port, even with the correct CP2102N driver installed — so we could not flash the firmware through the on-board USB chip.",
+              "The boards powered up over USB, but the laptop did not detect the USB port, even with the correct CP2102N driver installed, so we could not flash the firmware through the on-board USB chip.",
               "As a workaround we used an external FTDI FT232RL module. It programmed a bare ESP8266 without problems, but once the chip was soldered onto our PCB the FTDI module could no longer program it either. The programming path is the first thing I would design differently in a next version.",
             ],
             images: [
@@ -356,7 +356,7 @@ const CONTENT = {
             heading: "The result",
             text: [
               "In the end we had two working boards: press the button on the transmitter, and the receiver switches to red and sounds the alarm.",
-              "I measured the power consumption at about 200 mA from a 6 V supply, roughly 1.2 W, which gives a battery life of around 6 hours. That is enough for a test day, but not for a device that should always be ready — so the next steps are a sleep mode to save battery, LoRa for longer range and a more reliable link, one transmitter that can stop several carts or robots at once, and an ergonomic housing that shows battery level and signal strength.",
+              "I measured the power consumption at about 200 mA from a 6 V supply, roughly 1.2 W, which gives a battery life of around 6 hours. That is enough for a test day, but not for a device that should always be ready. The next steps are therefore a sleep mode to save battery, LoRa for longer range and a more reliable link, one transmitter that can stop several carts or robots at once, and an ergonomic housing that shows battery level and signal strength.",
             ],
             images: [
               { src: "assets/projects/wireless-e-stop/demo-running.gif", caption: "Demo: pressing the button switches the receiver to emergency mode" },
