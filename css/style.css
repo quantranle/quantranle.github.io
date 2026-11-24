@@ -4,7 +4,7 @@
    CONTENTS
      1. Theme colours      <- change colours here
      2. Base
-     3. Background (engineering grid)
+     3. Background (soft glow)
      4. Top bar and navigation
      5. Buttons and the "magnetic" hover movement
      6. Home page (hero)
@@ -31,17 +31,15 @@
   --text: #e8eef7;           /* main text */
   --muted: #a5b3c9;          /* secondary text */
   --faint: #7c8dab;          /* dates and small labels */
-  --accent: #f5a83c;         /* highlight colour */
-  --accent-ink: #1b1203;     /* text on top of the highlight colour */
+  --accent: #e8eef7;         /* highlight colour (same as the text, for a quiet look) */
+  --accent-ink: #0a1424;     /* text on top of the highlight colour */
   --ok: #4ade80;             /* status dot */
 
-  --accent-soft: rgba(245, 168, 60, 0.13);
-  --accent-glow: rgba(245, 168, 60, 0.35);
+  --accent-soft: rgba(255, 255, 255, 0.06);
+  --accent-glow: rgba(0, 0, 0, 0.45);
   --hover: rgba(255, 255, 255, 0.05);
   --header-bg: rgba(10, 20, 36, 0.82);
-  --grid-minor: rgba(140, 170, 220, 0.045);
-  --grid-major: rgba(140, 170, 220, 0.09);
-  --glow-a: rgba(245, 168, 60, 0.07);
+  --glow-a: rgba(255, 255, 255, 0.03);
   --glow-b: rgba(48, 102, 196, 0.16);
   --shadow: 0 20px 40px -24px rgba(0, 0, 0, 0.8);
 }
@@ -57,17 +55,15 @@
   --text: #0f1b30;
   --muted: #424f67;
   --faint: #5b677f;
-  --accent: #a3470a;
+  --accent: #0f1b30;
   --accent-ink: #ffffff;
   --ok: #15803d;
 
-  --accent-soft: rgba(163, 71, 10, 0.1);
-  --accent-glow: rgba(163, 71, 10, 0.3);
+  --accent-soft: rgba(15, 27, 48, 0.05);
+  --accent-glow: rgba(15, 27, 48, 0.25);
   --hover: rgba(15, 27, 48, 0.06);
   --header-bg: rgba(232, 234, 238, 0.84);
-  --grid-minor: rgba(15, 27, 48, 0.04);
-  --grid-major: rgba(15, 27, 48, 0.08);
-  --glow-a: rgba(163, 71, 10, 0.05);
+  --glow-a: rgba(255, 255, 255, 0.5);
   --glow-b: rgba(255, 255, 255, 0.75);
   --shadow: 0 20px 40px -26px rgba(15, 27, 48, 0.45);
 }
@@ -216,7 +212,7 @@ img { max-width: 100%; }
   transition: border-color 0.2s, color 0.2s;
 }
 .lightbox__close:hover,
-.lightbox__nav:hover { border-color: #f5a83c; color: #f5a83c; }
+.lightbox__nav:hover { border-color: #ffffff; color: #ffffff; }
 .lightbox__close { top: 12px; right: 12px; }
 .lightbox__nav--prev { left: 12px; top: calc(50% - 22px); }
 .lightbox__nav--next { right: 12px; top: calc(50% - 22px); }
@@ -231,7 +227,7 @@ img { max-width: 100%; }
 
 
 /* ----------------------------------------------------------------------------
-   3. BACKGROUND  —  a faint engineering-paper grid that stays in place
+   3. BACKGROUND  —  a plain page with a very soft glow that stays in place
    ------------------------------------------------------------------------- */
 
 .backdrop {
@@ -239,18 +235,6 @@ img { max-width: 100%; }
   background:
     radial-gradient(900px 520px at 88% -8%, var(--glow-a), transparent 70%),
     radial-gradient(760px 520px at -8% 18%, var(--glow-b), transparent 70%);
-}
-.backdrop::before {
-  content: ""; position: absolute; inset: 0;
-  background-image:
-    linear-gradient(var(--grid-major) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
-    linear-gradient(var(--grid-minor) 1px, transparent 1px),
-    linear-gradient(90deg, var(--grid-minor) 1px, transparent 1px);
-  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
-  background-position: center top;
-  -webkit-mask-image: radial-gradient(ellipse 95% 85% at 50% 25%, #000 35%, transparent 100%);
-          mask-image: radial-gradient(ellipse 95% 85% at 50% 25%, #000 35%, transparent 100%);
 }
 
 

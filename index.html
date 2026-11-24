@@ -11,20 +11,19 @@
   <meta name="color-scheme" content="dark light">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 
-  <!-- Picks the dark or light theme before the page is drawn (no flash). -->
+  <!-- Uses the light theme unless the visitor picked dark before (no flash). -->
   <script>
     (function () {
       var saved = null;
       try { saved = localStorage.getItem("theme"); } catch (e) {}
-      var prefersLight = window.matchMedia && window.matchMedia("(prefers-color-scheme: light)").matches;
-      document.documentElement.setAttribute("data-theme", saved || (prefersLight ? "light" : "dark"));
+      document.documentElement.setAttribute("data-theme", saved || "light");
     })();
   </script>
 
   <!-- The ?v=... at the end makes browsers load the newest file instead of an
        old saved copy. After you change a CSS or JS file, change the number
        here and at the bottom of this file (e.g. to today's date). -->
-  <link rel="stylesheet" href="css/style.css?v=2026-11-24g">
+  <link rel="stylesheet" href="css/style.css?v=2026-11-24h">
 </head>
 
 <body>
@@ -125,7 +124,7 @@
 
   <!-- content.js = your text.  main.js = builds the page from it.
        After editing either file, change the ?v=... number (see the top of this file). -->
-  <script src="js/content.js?v=2026-11-24g"></script>
-  <script src="js/main.js?v=2026-11-24g"></script>
+  <script src="js/content.js?v=2026-11-24h"></script>
+  <script src="js/main.js?v=2026-11-24h"></script>
 </body>
 </html>
