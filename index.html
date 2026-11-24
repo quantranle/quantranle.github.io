@@ -9,7 +9,7 @@
   <meta name="description" content="Portfolio of Quan Tran, mechatronics engineer and M.Sc. student at the Technical University of Munich: experience, projects and skills.">
 
   <meta name="color-scheme" content="dark light">
-  <link rel="icon" href="assets/favicon.svg?v=2026-11-24j" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon.svg?v=2026-11-24k" type="image/svg+xml">
 
   <!-- Uses the light theme unless the visitor picked dark before (no flash). -->
   <script>
@@ -23,12 +23,32 @@
   <!-- The ?v=... at the end makes browsers load the newest file instead of an
        old saved copy. After you change a CSS or JS file, change the number
        here and at the bottom of this file (e.g. to today's date). -->
-  <link rel="stylesheet" href="css/style.css?v=2026-11-24j">
+  <link rel="stylesheet" href="css/style.css?v=2026-11-24k">
 </head>
 
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
   <div class="backdrop" aria-hidden="true"></div>
+
+  <!-- A small robot arm that waves hello in the corner once, then leaves.
+       Its look and timing are in style.css, section 9 ("Robot arm"). -->
+  <svg class="hello-arm" viewBox="0 0 120 140" aria-hidden="true" focusable="false">
+    <text class="hello-arm__hi" x="2" y="20">hi_</text>
+    <rect class="hello-arm__part" x="30" y="126" width="60" height="10" rx="3"/>
+    <rect class="hello-arm__part" x="48" y="112" width="24" height="15" rx="2"/>
+    <g class="hello-arm__upper">
+      <rect class="hello-arm__part" x="54" y="62" width="12" height="50" rx="6"/>
+      <g class="hello-arm__fore">
+        <rect class="hello-arm__part" x="55" y="26" width="10" height="40" rx="5"/>
+        <g class="hello-arm__hand">
+          <path class="hello-arm__line" d="M54 26 L51 12 M66 26 L69 12"/>
+          <rect class="hello-arm__part" x="51" y="22" width="18" height="6" rx="2"/>
+        </g>
+        <circle class="hello-arm__part" cx="60" cy="64" r="6"/>
+      </g>
+    </g>
+    <circle class="hello-arm__part" cx="60" cy="110" r="7"/>
+  </svg>
 
   <!-- ====================================================================
        TOP BAR
@@ -124,7 +144,7 @@
 
   <!-- content.js = your text.  main.js = builds the page from it.
        After editing either file, change the ?v=... number (see the top of this file). -->
-  <script src="js/content.js?v=2026-11-24j"></script>
-  <script src="js/main.js?v=2026-11-24j"></script>
+  <script src="js/content.js?v=2026-11-24k"></script>
+  <script src="js/main.js?v=2026-11-24k"></script>
 </body>
 </html>
