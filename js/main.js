@@ -389,8 +389,7 @@
       h("div", { class: "story__chapters" }, chapters.map((chapter, i) =>
         h("section", { class: "chapter" },
           h("div", { class: "chapter__head" },
-            // Chapters are numbered in hex: 0x01, 0x02, ...
-            h("span", { class: "chapter__num", text: "0x" + (i + 1).toString(16).toUpperCase().padStart(2, "0") }),
+            h("span", { class: "chapter__num", text: String(i + 1).padStart(2, "0") }),
             h("h3", { class: "chapter__title", text: chapter.heading })),
           h("div", { class: "chapter__body" },
             (chapter.text || []).map((text) => h("p", { text })),
@@ -452,12 +451,7 @@
       details,
       hasTags || linkButtons.length
         ? h("div", { class: "project__foot" },
-            // "stack:" in front of the technology labels
-            hasTags
-              ? h("div", { class: "stack" },
-                  h("span", { class: "stack__label", text: "stack:", "aria-hidden": "true" }),
-                  tagList(p.tags))
-              : null,
+            tagList(p.tags),
             linkButtons.length ? h("div", { class: "project__links" }, linkButtons) : null)
         : null);
   }
@@ -508,17 +502,6 @@
 
   function renderFooter() {
     $("#footer-copy").textContent = "© " + new Date().getFullYear() + " " + C.profile.name;
-    // A small code-comment signature in the middle of the footer.
-    $("#footer-copy").after(h("span", { class: "footer-sig", "aria-hidden": "true",
-      text: "/* EOF :: " + (C.profile.initials || "") + " */" }));
-  }
-
-  /* A faint folder path above each page title, like a terminal:
-     ~/portfolio/projects, ~/portfolio/projects/wireless-emergency-stop-button */
-  function renderPaths() {
-    $$("main > .section").forEach((page) => {
-      page.prepend(h("p", { class: "section__path", "aria-hidden": "true", text: "~/portfolio/" + page.id }));
-    });
   }
 
   /* Types the home page role out letter by letter after the ">" prompt.
@@ -704,7 +687,6 @@
   renderExperience();
   renderProjects();
   renderStories();
-  renderPaths();
   renderSkills();
   renderContact();
   renderFooter();
