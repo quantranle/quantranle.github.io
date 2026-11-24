@@ -229,19 +229,26 @@ const CONTENT = {
       images: [],
     },
     {
-      // TODO: only the thesis title is in the CV. Add a summary of what you
-      // built, a few points, and check the year.
       title: "Environmental Sensor for an Electric Go-Cart",
       category: "Embedded & Hardware",
       featured: false,
       context: "Bachelor's thesis · Rhine-Waal University of Applied Sciences",
-      period: "2026",
+      period: "May 2026 – Aug 2026",
       summary:
-        "Bachelor's thesis on the implementation of an environmental sensor for an electric go-cart.",
-      points: [],
-      tags: ["Bachelor's thesis", "Sensors"],
+        "A forward-facing LiDAR sensor that shows, in real time, how far away the next object in front of the university's electric go-cart is. It is a basis for monitoring and future safety functions on the go-cart.",
+      points: [
+        "Motivation: at an assumed top speed of 50 km/h the go-cart covers about 14 m every second. With a driver reaction time of 1 to 2 seconds, it travels 14 to 28 m before braking even starts, so the sensor has to see about 30 m ahead. Common ultrasonic and infrared sensors only reach a few meters.",
+        "Sensor choice: compared ultrasonic, infrared, radar, single-point LiDAR and scanning LiDAR, and selected the Benewake TF02-Pro single-point LiDAR (up to 40 m on bright targets, 100 readings per second over UART).",
+        "Electronics and firmware: connected the sensor to the go-cart's Arduino CAN Board (ATmega2560) and wrote C++ firmware that only accepts frames with a valid checksum, then sends timestamped distance and signal strength to a laptop over USB.",
+        "Mechanical mount: designed two 120° mounting blocks in Tinkercad and 3D-printed them in PLA, so the sensor sits under the inclined front aluminum profile and points straight ahead.",
+        "Software: built a Python app (pySerial, Matplotlib) with a live numeric display, live plots of distance and signal strength, and CSV logging of every reading.",
+        "Results: tested at 15 distances from 10 cm to 40 m, and every reading was within the datasheet accuracy. At the 30 m requirement the system showed 30.24 m (24 cm off, ±30 cm allowed). Driving tests are the next step, as the go-cart's battery was out of order during the thesis.",
+      ],
+      tags: ["LiDAR", "Arduino", "UART", "C++", "Python", "3D printing"],
       links: [],
-      images: [],
+      images: [
+        { src: "assets/projects/go-cart-lidar/electric-go-cart.jpg", caption: "The Electric Go-Cart at Rhine-Waal University" },
+      ],
     },
     {
       title: "Mouth Detector",
