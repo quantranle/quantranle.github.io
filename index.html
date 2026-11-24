@@ -9,7 +9,7 @@
   <meta name="description" content="Portfolio of Quan Tran, mechatronics engineer and M.Sc. student at the Technical University of Munich: experience, projects and skills.">
 
   <meta name="color-scheme" content="dark light">
-  <link rel="icon" href="assets/favicon.svg?v=2026-11-24m" type="image/svg+xml">
+  <link rel="icon" href="assets/favicon.svg?v=2026-11-24n" type="image/svg+xml">
 
   <!-- Uses the light theme unless the visitor picked dark before (no flash). -->
   <script>
@@ -23,7 +23,7 @@
   <!-- The ?v=... at the end makes browsers load the newest file instead of an
        old saved copy. After you change a CSS or JS file, change the number
        here and at the bottom of this file (e.g. to today's date). -->
-  <link rel="stylesheet" href="css/style.css?v=2026-11-24m">
+  <link rel="stylesheet" href="css/style.css?v=2026-11-24n">
 </head>
 
 <body>
@@ -58,7 +58,8 @@
       <a class="brand" href="#top" aria-label="Home" data-magnetic="0.3"><span id="brand-mark">QT</span></a>
 
       <!-- NAVIGATION BUTTONS
-           - To rename a button, change its text.
+           - The text on the buttons comes from js/content.js and
+             js/content.de.js ("nav" in the "ui" block at the bottom).
            - Every button here also appears as a big button on the home page.
            - href="#about" opens the page with id="about" further down. -->
       <nav class="nav" id="nav" aria-label="Page sections">
@@ -68,6 +69,11 @@
         <a class="nav__link" href="#skills" data-magnetic="0.25">Skills</a>
         <a class="nav__link" href="#contact" data-magnetic="0.25">Contact</a>
       </nav>
+
+      <!-- EN / DE: switches the language. English is the default. -->
+      <button class="lang-toggle" id="lang-toggle" type="button" data-magnetic="0.3">
+        <span data-lang="en">EN</span><span class="lang-toggle__sep" aria-hidden="true">/</span><span data-lang="de">DE</span>
+      </button>
 
       <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Switch colour theme" data-magnetic="0.3"></button>
     </div>
@@ -134,7 +140,7 @@
   <footer class="site-footer">
     <div class="site-footer__inner">
       <span id="footer-copy"></span>
-      <a href="#top">← Home</a>
+      <a href="#top" id="footer-home">← Home</a>
     </div>
   </footer>
 
@@ -142,9 +148,11 @@
     <p class="content-error">This website needs JavaScript to show its content. Please enable it in your browser.</p>
   </noscript>
 
-  <!-- content.js = your text.  main.js = builds the page from it.
+  <!-- content.js = your text in English.  content.de.js = the same in German.
+       main.js = builds the page from it.
        After editing either file, change the ?v=... number (see the top of this file). -->
-  <script src="js/content.js?v=2026-11-24m"></script>
-  <script src="js/main.js?v=2026-11-24m"></script>
+  <script src="js/content.js?v=2026-11-24n"></script>
+  <script src="js/content.de.js?v=2026-11-24n"></script>
+  <script src="js/main.js?v=2026-11-24n"></script>
 </body>
 </html>

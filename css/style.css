@@ -305,6 +305,20 @@ a, button, summary, [role="button"] { cursor: url("../assets/cursor-click.svg") 
 }
 .theme-toggle:hover { border-color: var(--accent); color: var(--accent); }
 .theme-toggle .icon--moon { display: none; }
+
+/* EN / DE language switch: the current language is shown darker */
+.lang-toggle {
+  position: relative; flex: none;
+  display: inline-flex; align-items: center; gap: 3px;
+  height: 40px; padding: 0 11px;
+  border: 1px solid var(--border-strong); border-radius: 6px;
+  background: transparent; color: var(--faint);
+  font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600;
+  cursor: url("../assets/cursor-click.svg") 13 2, pointer;
+}
+.lang-toggle:hover { border-color: var(--accent); }
+.lang-toggle .is-active { color: var(--text); }
+.lang-toggle__sep { opacity: 0.5; }
 :root[data-theme="light"] .theme-toggle .icon--sun { display: none; }
 :root[data-theme="light"] .theme-toggle .icon--moon { display: inline-flex; }
 
@@ -853,6 +867,8 @@ a, button, summary, [role="button"] { cursor: url("../assets/cursor-click.svg") 
   opacity: 0; visibility: hidden;
   animation: arm-visit var(--arm-cycle) ease-in-out var(--arm-delay) infinite both;
 }
+/* It only visits the home page. Coming back to the home page starts it again. */
+body:not(.is-home) .hello-arm { display: none; }
 .hello-arm__part { fill: var(--card); stroke: var(--text); stroke-width: 2; }
 .hello-arm__line { fill: none; stroke: var(--text); stroke-width: 2.5; stroke-linecap: round; }
 .hello-arm__hi {

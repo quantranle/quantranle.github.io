@@ -2,14 +2,15 @@
    MAIN.JS  —  builds the page from js/content.js and adds the interactions.
 
    You normally do not need to edit this file. To change text, edit
-   js/content.js. To change colours, edit the top of css/style.css.
+   js/content.js (English) and js/content.de.js (German). To change colours,
+   edit the top of css/style.css.
 
    CONTENTS
-     0. Safety net (message if content.js has a typo)
+     0. Safety net (message if content.js has a typo) and languages
      1. Small helpers and icons
      2. Building each section
-     3. Interactions: theme switch, magnetic buttons, project filter,
-        switching between pages
+     3. Interactions: theme switch, language switch, magnetic buttons,
+        project filter, switching between pages
    ========================================================================= */
 
 (function () {
@@ -28,7 +29,25 @@
     return;
   }
 
-  const C = CONTENT;
+  /* Languages. English (content.js) is the default; German (content.de.js)
+     is used when the visitor picked it with the EN / DE button before. */
+  const LANGUAGES = { en: CONTENT };
+  if (typeof CONTENT_DE !== "undefined") LANGUAGES.de = CONTENT_DE;
+
+  let lang = "en";
+  try {
+    const saved = localStorage.getItem("lang");
+    if (saved && LANGUAGES[saved]) lang = saved;
+  } catch (e) { /* private mode: not remembered */ }
+  let C = LANGUAGES[lang];
+
+  /* A small text from the "ui" block of the current language.
+     Falls back to English if the German file does not have it yet. */
+  function t(key) {
+    const own = C.ui && C.ui[key];
+    if (own !== undefined) return own;
+    return (CONTENT.ui && CONTENT.ui[key]) || key;
+  }
 
   /* ---------- 1. Helpers ---------------------------------------------------- */
 
@@ -83,15 +102,17 @@
     const label = link.label.toLowerCase();
     const url = link.url.toLowerCase();
     if (link.isEmail || url.startsWith("mailto:")) return "mail";
+    if (link.isCv) return "file";
     if (url.includes("github.com")) return "github";
     if (url.includes("linkedin.com")) return "linkedin";
-    if (url.endsWith(".pdf") || label === "cv") return "file";
-    if (label.includes("publication") || label.includes("paper")) return "book";
+    if (url.endsWith(".pdf") || label === "cv" || label === "lebenslauf") return "file";
+    if (label.includes("publication") || label.includes("paper") || label.includes("veröffentlichung")) return "book";
     return "external";
   }
 
   function linkButton(link, extraClass) {
-    const isWeb = /^https?:/i.test(link.url);
+    // Web links and the CV open in a new tab, so the portfolio stays open.
+    const isWeb = /^https?:/i.test(link.url) || link.isCv;
     return h("a", {
       class: "btn" + (extraClass ? " " + extraClass : ""),
       href: link.url,
@@ -108,7 +129,7 @@
 
   function tagList(tags) {
     if (!tags || !tags.length) return null;
-    return h("ul", { class: "tags", "aria-label": "Technologies" }, tags.map((text) => h("li", { class: "tag", text })));
+    return h("ul", { class: "tags", "aria-label": t("technologies") }, tags.map((text) => h("li", { class: "tag", text })));
   }
 
   /* Pictures. An entry in content.js can have
@@ -124,8 +145,8 @@
     if (!images.length) return null;
     return h("div", { class: "gallery" + (images.length === 1 ? " gallery--single" : "") },
       images.map((image, i) => {
-        const label = image.caption || title + " — picture " + (i + 1);
-        const button = h("button", { class: "gallery__item", type: "button", title: "Click to enlarge" },
+        const label = image.caption || title + ", " + t("picture") + " " + (i + 1);
+        const button = h("button", { class: "gallery__item", type: "button", title: t("clickToEnlarge") },
           h("img", { src: image.src, alt: label, loading: "lazy" }));
         button.addEventListener("click", () => openLightbox(images, i, title));
         return button;
@@ -155,6 +176,12 @@
     let title = "";
 
     function render() {
+      // Labels follow the current language.
+      dialog.setAttribute("aria-label", t("pictureViewer"));
+      previous.setAttribute("aria-label", t("previousPicture"));
+      next.setAttribute("aria-label", t("nextPicture"));
+      close.setAttribute("aria-label", t("close"));
+
       const image = images[index];
       picture.src = image.src;
       picture.alt = image.caption || title;
@@ -192,9 +219,10 @@
     };
   }
 
-  function countLabel(list, word) {
+  /* "3 roles", "1 project" (or the German words). */
+  function countLabel(list, one, many) {
     const n = (list || []).length;
-    return n + " " + word + (n === 1 ? "" : "s");
+    return n + " " + (n === 1 ? one : many);
   }
 
   /* Where the Email button leads. By default it opens a new Gmail message
@@ -205,13 +233,13 @@
     return "https://mail.google.com/mail/?view=cm&fs=1&to=" + encodeURIComponent(p.email);
   }
 
-  /* Email, CV and profile links — used on the home page and in Contact. */
+  /* Email, CV and profile links, used on the home page and in Contact. */
   function profileLinks() {
     const p = C.profile;
     const links = [];
-    if (p.email) links.push({ label: "Email", url: emailUrl(p), isEmail: true });
+    if (p.email) links.push({ label: t("email"), url: emailUrl(p), isEmail: true });
+    if (p.cv) links.push({ label: t("cv"), url: p.cv, isCv: true });
     (p.links || []).forEach((link) => links.push(link));
-    if (p.cv) links.push({ label: "CV", url: p.cv });
     return links;
   }
 
@@ -221,13 +249,10 @@
     const p = C.profile;
 
     // The big buttons on the home page are copies of the nav links.
-    const smallText = {
-      about: "Background",
-      experience: countLabel(C.experience, "role"),
-      projects: countLabel(C.projects, "project"),
-      skills: "Tools & languages",
-      contact: "Say hello",
-    };
+    const smallText = Object.assign({}, t("jumpMeta"), {
+      experience: countLabel(C.experience, t("role"), t("roles")),
+      projects: countLabel(C.projects, t("project"), t("projects")),
+    });
     const jumps = $$(".nav__link").map((navLink) => {
       const id = navLink.getAttribute("href").slice(1);
       const number = $("#" + id + " .section__num");
@@ -239,7 +264,7 @@
     });
 
     const photo = p.photo
-      ? h("img", { class: "badge__photo", src: p.photo, alt: "Portrait of " + p.name, width: "128", height: "128" })
+      ? h("img", { class: "badge__photo", src: p.photo, alt: t("portraitOf") + " " + p.name, width: "128", height: "128" })
       : h("div", { class: "badge__photo badge__photo--initials", text: p.initials, "aria-hidden": "true" });
 
     $("#top").append(
@@ -259,7 +284,7 @@
         p.intro ? h("p", { class: "hero__intro enter", style: "--i:3", text: p.intro }) : null,
         h("div", { class: "hero__links enter", style: "--i:4" }, profileLinks().map((link) => linkButton(link, "btn--small")))),
 
-      h("aside", { class: "badge enter", style: "--i:3", "aria-label": "Quick facts" },
+      h("aside", { class: "badge enter", style: "--i:3", "aria-label": t("quickFacts") },
         h("div", { class: "badge__top" },
           h("div", { class: "badge__frame" }, photo),
           h("div", {},
@@ -269,7 +294,7 @@
         h("dl", { class: "facts" }, (p.facts || []).map((fact) =>
           h("div", { class: "facts__row" }, h("dt", { text: fact.label }), h("dd", { text: fact.value }))))),
 
-      h("nav", { class: "hero__jumps enter", style: "--i:5", "aria-label": "Pages" }, jumps)
+      h("nav", { class: "hero__jumps enter", style: "--i:5", "aria-label": t("pages") }, jumps)
     );
 
     $("#brand-mark").textContent = p.initials;
@@ -281,7 +306,7 @@
       h("div", { class: "about__text" },
         C.about.paragraphs.map((text, i) => h("p", { class: i === 0 ? "lead" : null, text }))),
       h("div", { class: "about__edu" },
-        h("h3", { class: "label", text: "Education" }),
+        h("h3", { class: "label", text: t("education") }),
         h("ol", { class: "edu" }, C.education.map((e) =>
           h("li", { class: "edu__item" },
             h("p", { class: "edu__when", text: e.period }),
@@ -331,7 +356,7 @@
      on that picture, and the arrows go through every picture of the story. */
   function storyFigure(image, all, title) {
     const index = all.indexOf(image);
-    const button = h("button", { class: "figure__frame", type: "button", title: "Click to enlarge" },
+    const button = h("button", { class: "figure__frame", type: "button", title: t("clickToEnlarge") },
       h("img", { src: image.src, alt: image.caption || title, loading: "lazy" }));
     button.addEventListener("click", () => openLightbox(all, index, title));
     return h("figure", { class: "figure" + (image.wide ? " figure--wide" : "") },
@@ -350,11 +375,11 @@
     const hasLinks = p.links && p.links.length;
 
     const back = () => h("a", { class: "btn btn--small", href: "#projects", "data-magnetic": "0.2" },
-      icon("arrowLeft"), h("span", { text: "All projects" }));
+      icon("arrowLeft"), h("span", { text: t("allProjects") }));
 
     let coverFigure = null;
     if (coverImage) {
-      const frame = h("button", { class: "story__cover", type: "button", title: "Click to enlarge" },
+      const frame = h("button", { class: "story__cover", type: "button", title: t("clickToEnlarge") },
         h("img", { src: coverImage.src, alt: coverImage.caption || p.title }));
       frame.addEventListener("click", () => openLightbox(all, all.indexOf(coverImage), p.title));
       coverFigure = frame;
@@ -398,7 +423,7 @@
                   chapter.images.map((image) => storyFigure(image, all, p.title)))
               : null)))),
 
-      h("nav", { class: "pager", "aria-label": "Back to projects" },
+      h("nav", { class: "pager", "aria-label": t("backToProjects") },
         back(),
         hasLinks ? linkButton(p.links[0]) : null));
   }
@@ -413,11 +438,11 @@
     let details = null;
     if (hasPoints && p.featured) {
       details = h("div", { class: "project__points" },
-        h("p", { class: "label", text: "What I did" }),
+        h("p", { class: "label", text: t("whatIDid") }),
         pointList(p.points));
     } else if (hasPoints) {
       details = h("details", { class: "project__details" },
-        h("summary", {}, h("span", { text: "What I did" }), icon("chevron")),
+        h("summary", {}, h("span", { text: t("whatIDid") }), icon("chevron")),
         pointList(p.points));
     }
 
@@ -426,7 +451,7 @@
     const linkButtons = (p.links || []).map((link) => linkButton(link, "btn--small"));
     if (story) {
       linkButtons.unshift(h("a", { class: "btn btn--small btn--primary", href: storyHref(p), "data-magnetic": "0.2" },
-        h("span", { text: "Read the story" }), icon("arrowRight")));
+        h("span", { text: t("readStory") }), icon("arrowRight")));
     }
     const hasTags = p.tags && p.tags.length;
 
@@ -462,8 +487,8 @@
 
     // Filter buttons are only useful when there is more than one category.
     if (categories.length > 1) {
-      const names = ["All"].concat(categories);
-      body.append(h("div", { class: "filters", role: "group", "aria-label": "Filter projects by category" },
+      const names = [t("filterAll")].concat(categories);
+      body.append(h("div", { class: "filters", role: "group", "aria-label": t("filterProjects") },
         names.map((name, i) => {
           const count = i === 0 ? C.projects.length : C.projects.filter((p) => p.category === name).length;
           return h("button", {
@@ -520,7 +545,7 @@
 
   /* "Previous / next" buttons at the bottom of each page, in nav order. */
   function renderPagers() {
-    const stops = [{ href: "#top", label: "Home" }].concat(
+    const stops = [{ href: "#top", label: t("home") }].concat(
       $$(".nav__link").map((link) => ({ href: link.getAttribute("href"), label: link.textContent.trim() })));
 
     stops.forEach((stop, i) => {
@@ -529,7 +554,7 @@
       if (!page) return;
       const previous = stops[i - 1];
       const next = stops[i + 1];
-      page.append(h("nav", { class: "pager", "aria-label": "Previous and next page" },
+      page.append(h("nav", { class: "pager", "aria-label": t("pagerLabel") },
         h("a", { class: "btn", href: previous.href, "data-magnetic": "0.2" },
           icon("arrowLeft"), h("span", { text: previous.label })),
         next
@@ -542,23 +567,45 @@
   /* ---------- 3. Interactions ------------------------------------------------ */
 
   /* Dark / light switch. The choice is remembered in the browser. */
+  function describeTheme() {
+    const button = $("#theme-toggle");
+    const isDark = document.documentElement.getAttribute("data-theme") !== "light";
+    button.setAttribute("aria-label", isDark ? t("toLightTheme") : t("toDarkTheme"));
+    button.setAttribute("title", isDark ? t("lightTheme") : t("darkTheme"));
+  }
+
   function initTheme() {
     const button = $("#theme-toggle");
     const root = document.documentElement;
     button.append(icon("sun", "icon--sun"), icon("moon", "icon--moon"));
 
-    function describe() {
-      const isDark = root.getAttribute("data-theme") !== "light";
-      button.setAttribute("aria-label", isDark ? "Switch to light theme" : "Switch to dark theme");
-      button.setAttribute("title", isDark ? "Light theme" : "Dark theme");
-    }
-    describe();
-
     button.addEventListener("click", () => {
       const next = root.getAttribute("data-theme") === "light" ? "dark" : "light";
       root.setAttribute("data-theme", next);
       try { localStorage.setItem("theme", next); } catch (e) { /* private mode: not remembered */ }
-      describe();
+      describeTheme();
+    });
+  }
+
+  /* EN / DE switch. English is the default; the choice is remembered in
+     the browser. Switching rebuilds the page in the other language and
+     keeps the visitor on the same page. */
+  function describeLanguage() {
+    const button = $("#lang-toggle");
+    $$("[data-lang]", button).forEach((span) => span.classList.toggle("is-active", span.dataset.lang === lang));
+    button.setAttribute("aria-label", t("switchLanguage"));
+    button.setAttribute("title", t("switchLanguage"));
+  }
+
+  function initLanguage() {
+    const button = $("#lang-toggle");
+    if (!LANGUAGES.de) { button.hidden = true; return; }
+
+    button.addEventListener("click", () => {
+      lang = lang === "en" ? "de" : "en";
+      C = LANGUAGES[lang];
+      try { localStorage.setItem("lang", lang); } catch (e) { /* private mode: not remembered */ }
+      renderAll();
     });
   }
 
@@ -568,6 +615,8 @@
     if (!hasMouse || prefersReducedMotion) return;
 
     $$("[data-magnetic]").forEach((el) => {
+      if (el.dataset.magneticReady) return;    // already set up
+      el.dataset.magneticReady = "1";
       const strength = parseFloat(el.dataset.magnetic) || 0.2;
 
       el.addEventListener("pointermove", (event) => {
@@ -594,6 +643,8 @@
   function initSpotlight() {
     if (!hasMouse) return;
     $$(".btn, .jump, [data-spotlight]").forEach((el) => {
+      if (el.dataset.spotlightReady) return;   // already set up
+      el.dataset.spotlightReady = "1";
       el.addEventListener("pointermove", (event) => {
         const box = el.getBoundingClientRect();
         el.style.setProperty("--gx", (event.clientX - box.left).toFixed(0) + "px");
@@ -631,17 +682,23 @@
      the home page, or the page named in the address (index.html#projects).
      Clicking a nav button changes the address, and this shows the right page.
      The browser's Back button works as usual. */
+  let showPage = function () {};
+
   function initPages() {
     const header = $("#site-header");
     const nav = $("#nav");
     const links = $$(".nav__link", nav);
     const home = $("#top");
-    const pages = [home].concat($$("main > .section"));
-    const homeTitle = document.title;
 
     function show() {
+      // Looked up each time: story pages are rebuilt when the language changes.
+      const pages = [home].concat($$("main > .section"));
+      const homeTitle = C.profile.name + " — " + C.profile.role;
       const id = decodeURIComponent(window.location.hash.slice(1));
       const page = pages.find((p) => p.id === id) || home;
+
+      // The waving robot arm only visits the home page.
+      document.body.classList.toggle("is-home", page === home);
 
       pages.forEach((p) => {
         p.hidden = p !== page;
@@ -672,7 +729,7 @@
     }
 
     window.addEventListener("hashchange", show);
-    show();
+    showPage = show;
 
     // A thin line appears under the top bar once you scroll down.
     window.addEventListener("scroll", () => {
@@ -682,20 +739,54 @@
 
   /* ---------- Start ---------------------------------------------------------- */
 
-  renderHero();
-  renderAbout();
-  renderExperience();
-  renderProjects();
-  renderStories();
-  renderSkills();
-  renderContact();
-  renderFooter();
-  renderPagers();
+  /* Texts that are written in index.html: nav buttons, page titles, footer. */
+  function renderStatic() {
+    document.documentElement.lang = lang;
+    const names = t("nav");
+    $$(".nav__link").forEach((link) => {
+      const id = link.getAttribute("href").slice(1);
+      if (!names[id]) return;
+      link.textContent = names[id];
+      const title = $("#" + id + "-title");
+      if (title) title.textContent = names[id];
+    });
+    $(".skip-link").textContent = t("skipLink");
+    $("#footer-home").textContent = "← " + t("home");
+  }
+
+  /* Removes everything built from content.js, before building it again. */
+  function clearRendered() {
+    $("#top").replaceChildren();
+    $$("main .section__body").forEach((body) => body.replaceChildren());
+    $$("main .pager").forEach((pager) => pager.remove());
+    $$("main > .story").forEach((story) => story.remove());
+  }
+
+  /* Builds the whole site in the current language. */
+  function renderAll() {
+    clearRendered();
+    renderStatic();
+    renderHero();
+    renderAbout();
+    renderExperience();
+    renderProjects();
+    renderStories();
+    renderSkills();
+    renderContact();
+    renderFooter();
+    renderPagers();
+
+    describeTheme();
+    describeLanguage();
+    initMagnetic();
+    initSpotlight();
+    initFilters();
+    initTyping();
+    showPage();
+  }
 
   initTheme();
-  initMagnetic();
-  initSpotlight();
-  initFilters();
+  initLanguage();
   initPages();
-  initTyping();
+  renderAll();
 })();

@@ -12,6 +12,12 @@
         on the page, so put the newest entry first.
      3. Change the text.
 
+   TWO LANGUAGES
+     This file is the English version (the default). The German version is
+     js/content.de.js and has exactly the same layout. When you change
+     something here, make the same change there, so both stay in step.
+     Visitors switch between them with the EN / DE button in the top bar.
+
    IF THE PAGE SHOWS AN ERROR after an edit, there is a typo in this file —
    usually a missing comma, quote or bracket. Press F12 in the browser and
    open the "Console" tab: it tells you the line number.
@@ -38,7 +44,7 @@ const CONTENT = {
 
     // Optional status badge next to your photo, for example
     // "Open to working student roles". Leave it as "" to hide it.
-    availability: "",
+    availability: "Open to working student & internship roles",
 
     email: "quan.lm.tran@gmail.com",
 
@@ -53,7 +59,7 @@ const CONTENT = {
 
     // To add a "CV" button: copy your CV into the assets folder and write
     // its path here, for example "assets/CV_Quan_Tran.pdf".
-    cv: "",
+    cv: "assets/CV_Quan_Tran.pdf",
 
     links: [
       { label: "GitHub",   url: "https://github.com/quantranle" },
@@ -65,6 +71,8 @@ const CONTENT = {
       { label: "Based in",  value: "Munich, Germany" },
       { label: "Studying",  value: "M.Sc. Mechatronics, Robotics and Biomechanical Engineering, TUM" },
       { label: "Focus",     value: "Modelling & simulation · Embedded systems · Applied AI" },
+      { label: "Looking for", value: "Working student or internship in robotics, Munich" },
+      { label: "Available", value: "Immediately · work permit for Germany" },
       { label: "Languages", value: "English C1 · German B1 · Vietnamese (native)" },
     ],
   },
@@ -423,6 +431,57 @@ const CONTENT = {
      ----------------------------------------------------------------------- */
   contact: {
     title: "Get in touch",
-    text: "The quickest way to reach me is by email or on LinkedIn.",
+    text: "I'm looking for a working student position or an internship in robotics in Munich, and I can start right away. The quickest way to reach me is by email or on LinkedIn.",
+  },
+
+  /* --------------------------------------------------------------------------
+     SMALL TEXTS  —  button labels and headings used all over the site.
+     ----------------------------------------------------------------------- */
+  ui: {
+    // The navigation buttons and the page titles.
+    nav: {
+      about: "About me",
+      experience: "Experience",
+      projects: "Projects",
+      skills: "Skills",
+      contact: "Contact",
+    },
+    // The small grey line on the big buttons of the home page.
+    jumpMeta: {
+      about: "Background",
+      skills: "Tools & languages",
+      contact: "Say hello",
+    },
+    role: "role", roles: "roles",
+    project: "project", projects: "projects",
+
+    home: "Home",
+    skipLink: "Skip to content",
+    education: "Education",
+    whatIDid: "What I did",
+    readStory: "Read the story",
+    allProjects: "All projects",
+    filterAll: "All",
+    email: "Email",
+    cv: "CV",
+    clickToEnlarge: "Click to enlarge",
+    picture: "picture",
+    quickFacts: "Quick facts",
+    portraitOf: "Portrait of",
+    pages: "Pages",
+    technologies: "Technologies",
+    filterProjects: "Filter projects by category",
+    pagerLabel: "Previous and next page",
+    backToProjects: "Back to projects",
+    pictureViewer: "Picture viewer",
+    previousPicture: "Previous picture",
+    nextPicture: "Next picture",
+    close: "Close",
+    toLightTheme: "Switch to light theme",
+    toDarkTheme: "Switch to dark theme",
+    lightTheme: "Light theme",
+    darkTheme: "Dark theme",
+    // Shown on the EN / DE button: what clicking it does.
+    switchLanguage: "Auf Deutsch lesen",
   },
 };

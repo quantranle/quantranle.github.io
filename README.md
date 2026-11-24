@@ -14,7 +14,8 @@ Double-click `index.html`. It opens in your browser.
 
 | File | What it is | Edit it when… |
 | --- | --- | --- |
-| `js/content.js` | **All the text**: introduction, education, experience, projects, skills | you want to change or add content (almost always this one) |
+| `js/content.js` | **All the text in English**: introduction, education, experience, projects, skills | you want to change or add content (almost always this one) |
+| `js/content.de.js` | **The same text in German**, same layout as `content.js` | you changed `content.js`: make the same change here |
 | `css/style.css` | Colours, fonts, spacing | you want to change the look |
 | `index.html` | Page skeleton, navigation buttons, browser-tab title | you want to rename a page or a button |
 | `js/main.js` | Builds the page and runs the interactions | rarely |
@@ -23,6 +24,12 @@ Double-click `index.html`. It opens in your browser.
 ## Common changes
 
 All of these are in `js/content.js`. After each change: save, then refresh the browser (F5).
+
+**Two languages (EN / DE)**
+The site is in English by default; the EN / DE button in the top bar switches to German, and the
+browser remembers the choice. The German text is in `js/content.de.js`. Whenever you change
+`js/content.js`, make the same change in `js/content.de.js` so both languages stay in step.
+Button labels and headings are in the `ui` block at the bottom of each file.
 
 **Add an experience**
 Find `experience: [`. Copy one block from `{` to `},`, paste it at the top of the list, and change the text.
